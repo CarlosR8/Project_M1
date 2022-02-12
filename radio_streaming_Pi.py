@@ -38,7 +38,7 @@ def snippets_main_after_init(tb):
 class radio_streaming_Pi(gr.top_block):
 
     def __init__(self):
-        gr.top_block.__init__(self, "radio_streaming_Pi", catch_exceptions=True)
+        gr.top_block.__init__(self, "radio_streaming_Pi")
 
         self._lock = threading.RLock()
 
@@ -51,7 +51,7 @@ class radio_streaming_Pi(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_float, 1, 'tcp://192.168.137.8:5555', 100, False, -1, '')
+        self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_float, 1, 'tcp://192.168.137.8:5555', 100, False, -1)
         self.osmosdr_source_0 = osmosdr.source(
             args="numchan=" + str(1) + " " + ""
         )
