@@ -1,6 +1,4 @@
 # this module will be imported in the into your flowgraph
-from ctypes import alignment
-from email import message
 import socket
 
 def client(tt):
@@ -12,18 +10,21 @@ def client(tt):
         port = 4242
         client_socket = socket.socket()
         client_socket.connect((host, port))
-        while True:
-            if(client_socket.getsockname()[0] != "0.0.0.0"):
-                # Connected
-                print("Connected to server")
-                # Check if variables have change
-                print(tt.get_stream_variable())
-                if(tt.get_stream_variable() != test_variable):
-                    print("sending message")
-                    test_variable = tt.get_stream_variable() # Store current value
-                    message_ = "test!"
-                    # client_socket.send(message_.encode())
-                    # client_socket.close()
+        if(client_socket.getsockname()[0] != "0.0.0.0"):
+            # Connected
+            print("Connected to server")
+            while True:
+                    # Check if variables have change
+                    # print(tt.get_stream_variable())
+                    # if(tt.get_stream_variable() != test_variable):
+                    if(tt.get_stream_variable() == "True"):
+                        tt.set_stream_variable("False")
+                        # print(tt.get_stream_variable())
+                        print("sending message")
+                        # test_variable = tt.get_stream_variable() # Store current value
+                        # message_ = "test!"
+                        client_socket.send(tt.get_station().encode())
+                        # client_socket.close()
 
 
 

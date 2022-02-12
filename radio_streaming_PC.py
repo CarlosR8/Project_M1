@@ -26,8 +26,8 @@ import threading
 def snipfcn_snippet_0(self):
     print("Starting client and GUI")
     #import threading
-    threading.Thread(target=epy_module_client.client,args=(self,)).start()
-    threading.Thread(target=epy_module_GUI.gui,args=(self,)).start()
+    threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
+    threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start().start()
 
 
 def snippets_main_after_init(tb):

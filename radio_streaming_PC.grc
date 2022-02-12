@@ -128,20 +128,22 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    source_code: "# this module will be imported in the into your flowgraph\nfrom\
-      \ ctypes import alignment\nfrom email import message\nimport socket\n\ndef client(tt):\n\
-      \    while True:\n        # Storage variables initial values\n        test_variable\
-      \ = \"False\"\n        # Try to connect\n        host = '192.168.137.8'\n  \
-      \      port = 4242\n        client_socket = socket.socket()\n        client_socket.connect((host,\
-      \ port))\n        while True:\n            if(client_socket.getsockname()[0]\
-      \ != \"0.0.0.0\"):\n                # Connected\n                print(\"Connected\
-      \ to server\")\n                # Check if variables have change\n         \
-      \       print(tt.get_stream_variable())\n                if(tt.get_stream_variable()\
-      \ != test_variable):\n                    print(\"sending message\")\n     \
-      \               test_variable = tt.get_stream_variable() # Store current value\n\
-      \                    message_ = \"test!\"\n                    # client_socket.send(message_.encode())\n\
-      \                    # client_socket.close()\n\n\n\n# def client(tt):\n#   \
-      \  while True:\n#         # with socket.socket(socket.AF_INET, socket.SOCK_STREAM)\
+    source_code: "# this module will be imported in the into your flowgraph\nimport\
+      \ socket\n\ndef client(tt):\n    while True:\n        # Storage variables initial\
+      \ values\n        test_variable = \"False\"\n        # Try to connect\n    \
+      \    host = '192.168.137.8'\n        port = 4242\n        client_socket = socket.socket()\n\
+      \        client_socket.connect((host, port))\n        if(client_socket.getsockname()[0]\
+      \ != \"0.0.0.0\"):\n            # Connected\n            print(\"Connected to\
+      \ server\")\n            while True:\n                    # Check if variables\
+      \ have change\n                    # print(tt.get_stream_variable())\n     \
+      \               # if(tt.get_stream_variable() != test_variable):\n         \
+      \           if(tt.get_stream_variable() == \"True\"):\n                    \
+      \    tt.set_stream_variable(\"False\")\n                        # print(tt.get_stream_variable())\n\
+      \                        print(\"sending message\")\n                      \
+      \  # test_variable = tt.get_stream_variable() # Store current value\n      \
+      \                  # message_ = \"test!\"\n                        client_socket.send(tt.get_station().encode())\n\
+      \                        # client_socket.close()\n\n\n\n# def client(tt):\n\
+      #     while True:\n#         # with socket.socket(socket.AF_INET, socket.SOCK_STREAM)\
       \ as s:\n#         #     print(testing)\n#         #     s.connect(('192.168.137.8',\
       \ 4242))\n#         #     if(testing != \"\"):\n#         #         print(testing)\n\
       \                \n#         #         # s.sendall(b'Hello, world')\n#     \
@@ -175,9 +177,9 @@ blocks:
 
       #import threading
 
-      threading.Thread(target=epy_module_client.client,args=(self,)).start()
+      threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
 
-      threading.Thread(target=epy_module_GUI.gui,args=(self,)).start()'
+      threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start().start()'
     comment: ''
     priority: '0'
     section: main_after_init
