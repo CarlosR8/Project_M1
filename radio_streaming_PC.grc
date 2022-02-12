@@ -1,0 +1,218 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: radio_streaming_PC
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: run
+    sizing_mode: fixed
+    thread_safe_setters: '1'
+    title: radio_streaming_PC
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 12.0]
+    rotation: 0
+    state: enabled
+- name: station
+  id: variable
+  parameters:
+    comment: ''
+    value: 096.9e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 12.0]
+    rotation: 0
+    state: true
+- name: stream_variable
+  id: variable
+  parameters:
+    comment: ''
+    value: '"False"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 12.0]
+    rotation: 0
+    state: true
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [240, 132.0]
+    rotation: 0
+    state: true
+- name: epy_module_GUI
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: "# this module will be imported in the into your flowgraph\nimport\
+      \ tkinter as tk\nimport tkinter.font as tkFont\n\ndef gui(tt):\n    while True:\n\
+      \        window = tk.Tk()\n        label = tk.Label(text=\"Current station:\
+      \ \")\n        label.grid(column=0, row=0, columnspan=2)\n\n        station_number\
+      \ = tk.StringVar()\n        \n        # Entry_Control = tk.Entry(window, textvariable=station_number,\
+      \ validate=\"key\", validatecommand=callback, justify='center')\n        Entry_Control\
+      \ = tk.Entry(window, textvariable=station_number, justify='center')\n      \
+      \  Entry_Control.grid(column=0, row=1, columnspan=2)\n\n        button = tk.Button(text=\"\
+      Change\", command= lambda: changeStation(tt,Entry_Control.get()))\n        button.grid(column=0,\
+      \ row=2)\n        close = tk.Button(text=\"Close\", command= lambda: closeButton(window))\n\
+      \        close.grid(column=1, row=2)\n\n        window.mainloop()\n\ndef callback():\n\
+      \    # print(station_number.get()) #Triggered by typing\n    return True\n\n\
+      def changeStation(tt, station):\n    try:\n        tt.stream_variable = \"True\"\
+      \n        # tt.set_stream_variable(tt.stream_variable)\n        tt.set_stream_variable(\"\
+      True\")\n        tt.station = station\n        tt.set_station(tt.station)\n\
+      \        print(tt.get_station())\n        # host = '192.168.137.8'\n       \
+      \ # port = 4242  # socket server port number\n\n        # client_socket = socket.socket()\
+      \  # instantiate\n        # client_socket.connect((host, port))  # connect to\
+      \ the server\n\n        # message = input(\" -> \")  # take input\n\n      \
+      \  # while message.lower().strip() != 'bye':\n        #     client_socket.send(message.encode())\
+      \  # send message\n        #     data = client_socket.recv(1024).decode()  #\
+      \ receive response\n\n        #     print('Received from server: ' + data) \
+      \ # show in terminal\n\n        #     message = input(\" -> \")  # again take\
+      \ input\n\n        # client_socket.close()  # close the connection\n    except:\n\
+      \        print(\"Error!\")\n\ndef closeButton(window):\n    window.quit()"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 316.0]
+    rotation: 0
+    state: true
+- name: epy_module_client
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: "# this module will be imported in the into your flowgraph\nfrom\
+      \ ctypes import alignment\nfrom email import message\nimport socket\n\ndef client(tt):\n\
+      \    while True:\n        # Storage variables initial values\n        test_variable\
+      \ = \"False\"\n        # Try to connect\n        host = '192.168.137.8'\n  \
+      \      port = 4242\n        client_socket = socket.socket()\n        client_socket.connect((host,\
+      \ port))\n        while True:\n            if(client_socket.getsockname()[0]\
+      \ != \"0.0.0.0\"):\n                # Connected\n                print(\"Connected\
+      \ to server\")\n                # Check if variables have change\n         \
+      \       print(tt.get_stream_variable())\n                if(tt.get_stream_variable()\
+      \ != test_variable):\n                    print(\"sending message\")\n     \
+      \               test_variable = tt.get_stream_variable() # Store current value\n\
+      \                    message_ = \"test!\"\n                    # client_socket.send(message_.encode())\n\
+      \                    # client_socket.close()\n\n\n\n# def client(tt):\n#   \
+      \  while True:\n#         # with socket.socket(socket.AF_INET, socket.SOCK_STREAM)\
+      \ as s:\n#         #     print(testing)\n#         #     s.connect(('192.168.137.8',\
+      \ 4242))\n#         #     if(testing != \"\"):\n#         #         print(testing)\n\
+      \                \n#         #         # s.sendall(b'Hello, world')\n#     \
+      \    #         # s.sendall(b'{}'.format(station + \">\"))\n#         #     \
+      \    s.send(testing.encode())\n#         #         data = s.recv(1024)\n\n#\
+      \         #         print('Received', repr(data))\n#         #         print(testing)\n\
+      #         #         testing=\"\"\n#         host = '192.168.137.8'\n#      \
+      \   port = 4242  # socket server port number\n\n#         client_socket = socket.socket()\
+      \  # instantiate\n#         print(client_socket.getpeername())\n#         client_socket.connect((host,\
+      \ port))  # connect to the server\n#         # if(client_socket.raddr):\n# \
+      \            # print(\"conncted\")\n#         print(client_socket.getpeername())\n\
+      \n#         message = \"test...\"  # take input\n#         # print(tt.get_stream_variable())\n\
+      #         # while tt.get_stream_variable() == 'True':\n#             # print(\"\
+      sending message\")\n#         client_socket.send(message.encode())  # send message\n\
+      \        \n#         data = client_socket.recv(1024).decode()  # receive response\n\
+      \        \n#             # print('Received from server: ' + data)  # show in\
+      \ terminal\n\n#             # message = input(\" -> \")  # again take input\n\
+      \n#         # client_socket.close()  # close the connection"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 268.0]
+    rotation: 0
+    state: true
+- name: snippet_0
+  id: snippet
+  parameters:
+    alias: ''
+    code: 'print("Starting client and GUI")
+
+      #import threading
+
+      threading.Thread(target=epy_module_client.client,args=(self,)).start()
+
+      threading.Thread(target=epy_module_GUI.gui,args=(self,)).start()'
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 204.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://192.168.137.8:5555
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 108.0]
+    rotation: 0
+    state: true
+
+connections:
+- [zeromq_sub_source_0, '0', audio_sink_0, '0']
+
+metadata:
+  file_format: 1
