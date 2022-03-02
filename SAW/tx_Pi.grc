@@ -1,0 +1,158 @@
+options:
+  parameters:
+    author: cmrivera
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: tx_Pi
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Raspberry pi emitter (gr-rpitx)
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: frequency_
+  id: variable
+  parameters:
+    comment: ''
+    value: 5e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 12.0]
+    rotation: 0
+    state: true
+- name: sample_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 200e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 12.0]
+    rotation: 0
+    state: enabled
+- name: waveform_
+  id: variable
+  parameters:
+    comment: 'Constant = 0
+
+      Sine = 1
+
+      Cosine = 2
+
+      Square = 3
+
+      Triangle = 4
+
+      Saw Tooth = 5'
+    value: '3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 12.0]
+    rotation: 0
+    state: true
+- name: analog_const_source_x_0
+  id: analog_const_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 252.0]
+    rotation: 0
+    state: true
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: 400e-3
+    comment: ''
+    freq: frequency_
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: 500e-3
+    phase: '0'
+    samp_rate: sample_rate
+    type: float
+    waveform: waveform_
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 124.0]
+    rotation: 0
+    state: true
+- name: blocks_magphase_to_complex_0
+  id: blocks_magphase_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 168.0]
+    rotation: 0
+    state: true
+- name: rpitx_rpitx_sink_0
+  id: rpitx_rpitx_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    carrier_freq: 86.6e6
+    comment: ''
+    samp_rate: sample_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 172.0]
+    rotation: 0
+    state: true
+
+connections:
+- [analog_const_source_x_0, '0', blocks_magphase_to_complex_0, '1']
+- [analog_sig_source_x_0, '0', blocks_magphase_to_complex_0, '0']
+- [blocks_magphase_to_complex_0, '0', rpitx_rpitx_sink_0, '0']
+
+metadata:
+  file_format: 1

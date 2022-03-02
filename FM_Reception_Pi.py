@@ -5,7 +5,8 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: radio_streaming_Pi
+# Title: Not titled yet
+# Author: cmrivera
 # GNU Radio version: v3.8.5.0-5-g982205bd
 
 from gnuradio import analog
@@ -21,20 +22,17 @@ from gnuradio import zeromq
 import epy_module_server  # embedded python module
 import osmosdr
 import time
-import threading
 
 
-class radio_streaming_Pi(gr.top_block):
+class FM_Reception_Pi(gr.top_block):
 
     def __init__(self):
-        gr.top_block.__init__(self, "radio_streaming_Pi")
-
-        self._lock = threading.RLock()
+        gr.top_block.__init__(self, "Not titled yet")
 
         ##################################################
         # Variables
         ##################################################
-        self.station = station = 96.9e6
+        self.station = station = 86.8e6
         self.samp_rate = samp_rate = 1.152e6
 
         ##################################################
@@ -62,7 +60,7 @@ class radio_streaming_Pi(gr.top_block):
                 1,
                 samp_rate,
                 96e3,
-                48e3,
+                36e3,
                 firdes.WIN_HAMMING,
                 6.76))
         self.analog_wfm_rcv_0 = analog.wfm_rcv(
@@ -83,22 +81,20 @@ class radio_streaming_Pi(gr.top_block):
         return self.station
 
     def set_station(self, station):
-        with self._lock:
-            self.station = station
-            self.osmosdr_source_0.set_center_freq(self.station, 0)
+        self.station = station
+        self.osmosdr_source_0.set_center_freq(self.station, 0)
 
     def get_samp_rate(self):
         return self.samp_rate
 
     def set_samp_rate(self, samp_rate):
-        with self._lock:
-            self.samp_rate = samp_rate
-            self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 96e3, 48e3, firdes.WIN_HAMMING, 6.76))
-            self.osmosdr_source_0.set_sample_rate(self.samp_rate)
+        self.samp_rate = samp_rate
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate, 96e3, 36e3, firdes.WIN_HAMMING, 6.76))
+        self.osmosdr_source_0.set_sample_rate(self.samp_rate)
 
 def snipfcn_snippet_0(self):
     print("Starting server")
-    #import threading
+    import threading
     threading.Thread(target=epy_module_server.server,args=(self,)).start()
 
 
@@ -108,7 +104,7 @@ def snippets_main_after_init(tb):
 
 
 
-def main(top_block_cls=radio_streaming_Pi, options=None):
+def main(top_block_cls=FM_Reception_Pi, options=None):
     tb = top_block_cls()
     snippets_main_after_init(tb)
     def sig_handler(sig=None, frame=None):
@@ -122,6 +118,11 @@ def main(top_block_cls=radio_streaming_Pi, options=None):
 
     tb.start()
 
+    try:
+        input('Press Enter to quit: ')
+    except EOFError:
+        pass
+    tb.stop()
     tb.wait()
 
 

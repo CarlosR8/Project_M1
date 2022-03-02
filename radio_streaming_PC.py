@@ -6,38 +6,26 @@
 #
 # GNU Radio Python Flow Graph
 # Title: radio_streaming_PC
-# GNU Radio version: 3.9.5.0
+# GNU Radio version: v3.8.5.0-5-g982205bd
 
 from gnuradio import audio
 from gnuradio import gr
 from gnuradio.filter import firdes
-from gnuradio.fft import window
 import sys
 import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import zeromq
-import radio_streaming_PC_epy_module_GUI as epy_module_GUI  # embedded python module
-import radio_streaming_PC_epy_module_client as epy_module_client  # embedded python module
+import epy_module_GUI  # embedded python module
+import epy_module_client  # embedded python module
 import threading
-
-
-def snipfcn_snippet_0(self):
-    print("Starting client and GUI")
-    #import threading
-    threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
-    threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start().start()
-
-
-def snippets_main_after_init(tb):
-    snipfcn_snippet_0(tb)
 
 
 class radio_streaming_PC(gr.top_block):
 
     def __init__(self):
-        gr.top_block.__init__(self, "radio_streaming_PC", catch_exceptions=True)
+        gr.top_block.__init__(self, "radio_streaming_PC")
 
         self._lock = threading.RLock()
 
@@ -51,7 +39,7 @@ class radio_streaming_PC(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_float, 1, 'tcp://192.168.137.8:5555', 100, False, -1, '')
+        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_float, 1, 'tcp://192.168.137.8:5555', 100, False, -1)
         self.audio_sink_0 = audio.sink(samp_rate, '', True)
 
 
@@ -81,6 +69,16 @@ class radio_streaming_PC(gr.top_block):
     def set_samp_rate(self, samp_rate):
         with self._lock:
             self.samp_rate = samp_rate
+
+def snipfcn_snippet_0(self):
+    print("Starting client and GUI")
+    #import threading
+    threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
+    threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()
+
+
+def snippets_main_after_init(tb):
+    snipfcn_snippet_0(tb)
 
 
 

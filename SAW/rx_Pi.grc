@@ -1,6 +1,6 @@
 options:
   parameters:
-    author: ''
+    author: cmrivera
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -10,7 +10,7 @@ options:
     gen_linking: dynamic
     generate_options: no_gui
     hier_block_src_path: '.:'
-    id: radio_streaming_Pi
+    id: rx_Pi
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -18,11 +18,11 @@ options:
     realtime_scheduling: ''
     run: 'True'
     run_command: '{python} -u {filename}'
-    run_options: run
+    run_options: prompt
     sizing_mode: fixed
-    thread_safe_setters: '1'
-    title: radio_streaming_Pi
-    window_size: ''
+    thread_safe_setters: ''
+    title: Raspberry Pi Receiver
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
@@ -32,7 +32,67 @@ options:
     state: enabled
 
 blocks:
-- name: samp_rate
+- name: amplitude_
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [536, 12.0]
+    rotation: 0
+    state: true
+- name: carrying_frequency
+  id: variable
+  parameters:
+    comment: ''
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 12.0]
+    rotation: 0
+    state: true
+- name: frequency_
+  id: variable
+  parameters:
+    comment: ''
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [344, 12.0]
+    rotation: 0
+    state: true
+- name: measured_frequency
+  id: variable
+  parameters:
+    comment: ''
+    value: 434e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 12.0]
+    rotation: 0
+    state: true
+- name: offset_
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [632, 12.0]
+    rotation: 0
+    state: true
+- name: sample_rate
   id: variable
   parameters:
     comment: ''
@@ -41,36 +101,84 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [256, 12.0]
+    coordinate: [240, 12.0]
     rotation: 0
     state: enabled
-- name: station
+- name: waveform_
   id: variable
   parameters:
-    comment: ''
-    value: 96.9e6
+    comment: 'Constant = 100
+
+      Sine = 101
+
+      Cosine = 102
+
+      Square = 103
+
+      Triangle = 104
+
+      Saw Tooth = 105'
+    value: '103'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 12.0]
+    coordinate: [440, 12.0]
     rotation: 0
     state: true
-- name: analog_wfm_rcv_0
-  id: analog_wfm_rcv
+- name: analog_const_source_x_0
+  id: analog_const_source_x
   parameters:
     affinity: ''
     alias: ''
-    audio_decimation: '4'
     comment: ''
+    const: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
-    quad_rate: 192e3
+    type: float
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 180.0]
+    coordinate: [64, 252.0]
+    rotation: 0
+    state: true
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amplitude_
+    comment: ''
+    freq: frequency_
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: offset_
+    phase: '0'
+    samp_rate: sample_rate
+    type: float
+    waveform: waveform_
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 124.0]
+    rotation: 0
+    state: true
+- name: blocks_magphase_to_complex_0
+  id: blocks_magphase_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 168.0]
     rotation: 0
     state: true
 - name: epy_module_server
@@ -83,49 +191,25 @@ blocks:
       \ socket\n\t\tsock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n\t\tsock.setsockopt(socket.SOL_SOCKET,\
       \ socket.SO_REUSEADDR, 1)\n\t\tsock.bind(('192.168.137.8',4242))\n\t\t# Listen\n\
       \t\tprint(\"Waiting for connection...\")\n\t\tsock.listen(1)\n\t\t# Connected\n\
-      \t\tconn,addr=sock.accept()\n\t\twith conn:\n\t\t\tprint('Connected from ',\
+      \t\tconn,addr=sock.accept()\n\t\twith conn:\n\t\t\tprint('Connected from: ',\
       \ addr)\n\t\t\tmessage = \"\" # Variable to store complete message\n\t\t\twhile\
       \ True:\n\t\t\t\t# Get text\n\t\t\t\tdata=conn.recv(1)\n\t\t\t\tif data:\n\t\
-      \t\t\t\tdata=data.decode()\n\t\t\t\t\tmessage = message+data\n\t\t\t\t\tprint(message)\
-      \ \n\t\t\t\t\tif '>' in message: # Delimeter to indicate end of message\n\t\t\
-      \t\t\t\ttry:\n\t\t\t\t\t\t\tinput_station = message.replace('>','')\n\t\t\t\t\
-      \t\t\tprint('Current station: ' + str(tt.get_station()))\n\t\t\t\t\t\t\ttt.station\
-      \ = input_station\n\t\t\t\t\t\t\ttt.set_station(float(input_station)*1000000)\n\
-      \t\t\t\t\t\t\tprint('New station: ' + str(tt.get_station()))\n\t\t\t\t\t\t\t\
-      message = \"\" # Reset variable\n\t\t\t\t\t\texcept:\n\t\t\t\t\t\t\tmessage\
-      \ = \"\" # Reset variable\n\t\t\t\t\t\t\tprint(\"Error: variable not set\")\t\
-      \t\t\t\t\t\n\t\t\t\t\t# Quit\n\t\t\t\t\tif 'q' in data:\n\t\t\t\t\t\tprint(\"\
-      Closing connection...\")\n\t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\t\t\t\
-      \t\t\tsock.close()\n\t\t\t\t\t\tbreak # Back to listen loop"
+      \t\t\t\tdata=data.decode()\n\t\t\t\t\tmessage = message+data\n\t\t\t\t\t# print(message)\n\
+      \t\t\t\t\tif '>' in message: # Delimeter to indicate end of message\n\t\t\t\t\
+      \t\ttry:\n\t\t\t\t\t\t\t# Changing variables\n\t\t\t\t\t\t\tmessage = message.replace('>','').strip()\n\
+      \t\t\t\t\t\t\t[var_name, var_value] = message.split(\"=\")\n\t\t\t\t\t\t\tcommand\
+      \ = \"tt.set_{}(float({}))\".format(var_name, var_value)\n\t\t\t\t\t\t\texec(command)\
+      \ \n\t\t\t\t\t\t\tprint(\"The new value of the variable {} is: {}\".format(var_name,\
+      \ var_value))\n\t\t\t\t\t\t\tmessage = \"\" # Reset variable\n\t\t\t\t\t\texcept:\n\
+      \t\t\t\t\t\t\tmessage = \"\" # Reset variable\n\t\t\t\t\t\t\tprint(\"Error:\
+      \ variable not set\")\t\t\t\t\t\t\n\t\t\t\t\t# Quit\n\t\t\t\t\tif 'quit' in\
+      \ data:\n\t\t\t\t\t\tprint(\"Closing connection...\")\n\t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\
+      \t\t\t\t\t\tsock.close()\n\t\t\t\t\t\tbreak # Back to listen loop"
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 380.0]
-    rotation: 0
-    state: true
-- name: low_pass_filter_0
-  id: low_pass_filter
-  parameters:
-    affinity: ''
-    alias: ''
-    beta: '6.76'
-    comment: ''
-    cutoff_freq: 96e3
-    decim: '6'
-    gain: '1'
-    interp: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: samp_rate
-    type: fir_filter_ccf
-    width: 48e3
-    win: firdes.WIN_HAMMING
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [336, 140.0]
+    coordinate: [64, 364.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -303,7 +387,7 @@ blocks:
     dc_offset_mode7: '0'
     dc_offset_mode8: '0'
     dc_offset_mode9: '0'
-    freq0: station
+    freq0: measured_frequency
     freq1: 100e6
     freq10: 100e6
     freq11: 100e6
@@ -467,7 +551,7 @@ blocks:
     minoutbuf: '0'
     nchan: '1'
     num_mboards: '1'
-    sample_rate: samp_rate
+    sample_rate: sample_rate
     sync: sync
     time_source0: ''
     time_source1: ''
@@ -482,7 +566,22 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 108.0]
+    coordinate: [792, 100.0]
+    rotation: 0
+    state: true
+- name: rpitx_rpitx_sink_0
+  id: rpitx_rpitx_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    carrier_freq: carrying_frequency
+    comment: ''
+    samp_rate: sample_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 172.0]
     rotation: 0
     state: true
 - name: snippet_0
@@ -491,7 +590,7 @@ blocks:
     alias: ''
     code: 'print("Starting server")
 
-      #import threading
+      import threading
 
       threading.Thread(target=epy_module_server.server,args=(self,)).start()'
     comment: ''
@@ -501,7 +600,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 316.0]
+    coordinate: [64, 300.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0
@@ -514,20 +613,21 @@ blocks:
     hwm: '-1'
     pass_tags: 'False'
     timeout: '100'
-    type: float
+    type: complex
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 172.0]
+    coordinate: [1064, 164.0]
     rotation: 0
     state: true
 
 connections:
-- [analog_wfm_rcv_0, '0', zeromq_pub_sink_0, '0']
-- [low_pass_filter_0, '0', analog_wfm_rcv_0, '0']
-- [osmosdr_source_0, '0', low_pass_filter_0, '0']
+- [analog_const_source_x_0, '0', blocks_magphase_to_complex_0, '1']
+- [analog_sig_source_x_0, '0', blocks_magphase_to_complex_0, '0']
+- [blocks_magphase_to_complex_0, '0', rpitx_rpitx_sink_0, '0']
+- [osmosdr_source_0, '0', zeromq_pub_sink_0, '0']
 
 metadata:
   file_format: 1

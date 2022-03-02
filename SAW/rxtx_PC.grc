@@ -1,0 +1,562 @@
+options:
+  parameters:
+    author: cmrivera
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: rxtx_PC
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: GNU Spectrum Analyzer by Carlos RIVERA
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: amplitude_
+  id: variable_qtgui_entry
+  parameters:
+    comment: 5,0,1,2
+    gui_hint: 5,0,1,2
+    label: 'Amplitude                   '
+    type: real
+    value: 300e-3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 164.0]
+    rotation: 0
+    state: enabled
+- name: btn_new
+  id: variable_qtgui_push_button
+  parameters:
+    comment: 0,1,1,1
+    gui_hint: 0,1,1,1
+    label: New
+    pressed: '1'
+    released: '0'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [136, 364.0]
+    rotation: 0
+    state: disabled
+- name: btn_open
+  id: variable_qtgui_push_button
+  parameters:
+    comment: 0,2,1,1
+    gui_hint: 0,2,1,1
+    label: Open
+    pressed: '1'
+    released: '0'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 364.0]
+    rotation: 0
+    state: disabled
+- name: btn_save
+  id: variable_qtgui_push_button
+  parameters:
+    comment: 0,3,1,1
+    gui_hint: 0,3,1,1
+    label: Save
+    pressed: '1'
+    released: '0'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 364.0]
+    rotation: 0
+    state: disabled
+- name: carrying_frequency
+  id: variable_qtgui_entry
+  parameters:
+    comment: 6,0,1,2
+    gui_hint: 6,0,1,2
+    label: 'Carrying frequency     '
+    type: real
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 260.0]
+    rotation: 0
+    state: enabled
+- name: entry_bandwidth
+  id: variable_qtgui_entry
+  parameters:
+    comment: 3,2,1,2
+    gui_hint: 3,2,1,2
+    label: 'Bandwidth   '
+    type: real
+    value: 48e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 492.0]
+    rotation: 0
+    state: disabled
+- name: entry_center_frequency
+  id: variable_qtgui_entry
+  parameters:
+    comment: 3,0,1,2
+    gui_hint: 3,0,1,2
+    label: 'Center frequency '
+    type: real
+    value: 86.6e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 492.0]
+    rotation: 0
+    state: disabled
+- name: frequency_
+  id: variable_qtgui_entry
+  parameters:
+    comment: 4,0,1,2
+    gui_hint: 4,0,1,2
+    label: 'Test frequency           '
+    type: real
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 20.0]
+    rotation: 0
+    state: enabled
+- name: label_conf
+  id: variable_qtgui_label
+  parameters:
+    comment: 0,0,1,1
+    formatter: None
+    gui_hint: 0,0,1,1
+    label: Configuration
+    type: string
+    value: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 364.0]
+    rotation: 0
+    state: disabled
+- name: measured_frequency
+  id: variable_qtgui_range
+  parameters:
+    comment: 2,0,1,4
+    gui_hint: 2,0,1,4
+    label: ''
+    min_len: '200'
+    orient: Qt.Horizontal
+    rangeType: float
+    start: 80e6
+    step: 8.68e6
+    stop: 440e6
+    value: 86.8e6
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 364.0]
+    rotation: 0
+    state: disabled
+- name: measured_frequency
+  id: variable_qtgui_entry
+  parameters:
+    comment: 7,0,1,2
+    gui_hint: 7,0,1,2
+    label: 'Measured Frequency  '
+    type: real
+    value: 434e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [752, 356.0]
+    rotation: 0
+    state: enabled
+- name: offset_
+  id: variable_qtgui_entry
+  parameters:
+    comment: 5,2,1,2
+    gui_hint: 5,2,1,2
+    label: 'Offset          '
+    type: real
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [904, 164.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate
+  id: variable_qtgui_entry
+  parameters:
+    comment: 7,2,1,2
+    gui_hint: 7,2,1,2
+    label: 'Sample rate '
+    type: real
+    value: 1.152e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [920, 356.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 48e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 12.0]
+    rotation: 0
+    state: disabled
+- name: waveform_
+  id: variable_qtgui_chooser
+  parameters:
+    comment: 4,2,1,2
+    gui_hint: 4,2,1,2
+    label: 'Waveform   '
+    label0: Constant
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '["Constant","Sine","Cosine","Square","Triangle","Saw Tooth"]'
+    num_opts: '0'
+    option0: '100'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[0,1,2,3,4,5]'
+    orient: Qt.QVBoxLayout
+    type: int
+    value: '3'
+    widget: combo_box
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 20.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: sample_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 92.0]
+    rotation: 0
+    state: true
+- name: epy_module_client
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: "# this module will be imported in the into your flowgraph\nimport\
+      \ socket\n\ndef client(tt):\n    while True:\n        # Storage variables initial\
+      \ values\n        variables=[\"frequency_\",\"waveform_\",\"amplitude_\",\"\
+      offset_\",\"sample_rate\",\"carrying_frequency\",\"measured_frequency\"]\n \
+      \       old_values=[]\n        new_values=[]\n        for variable in variables:\n\
+      \            exec(\"old_values.append(tt.get_{}())\".format(variable))\n   \
+      \     \n        new_values = old_values\n        # Try to connect\n        host\
+      \ = '192.168.137.8'\n        port = 4242\n        client_socket = socket.socket()\n\
+      \        client_socket.connect((host, port))\n        if(client_socket.getsockname()[0]\
+      \ != \"0.0.0.0\"):\n            # Connected\n            print(\"Connected to\
+      \ server\")\n            while True:\n                # Check if variables have\
+      \ changed\n                for i, variable in enumerate(variables):\n      \
+      \              if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
+      \                        value=eval(\"tt.get_{}()\".format(variable))\n    \
+      \                    if(variable==\"waveform_\"):\n                        \
+      \    value=value+100\n\n                        message=variable + \"=\" + str(value)\
+      \ + \">\"\n                        client_socket.send(message.encode())\n  \
+      \                      # Register new variable value\n                     \
+      \   old_values[i]=eval(\"tt.get_{}()\".format(variable))\n\n               \
+      \ # client_socket.close()\n"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 260.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '0.1'
+    axislabels: 'True'
+    bw: sample_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: measured_frequency
+    fftsize: '4096'
+    freqhalf: 'True'
+    grid: 'True'
+    gui_hint: 1,0,1,4
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '-14'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: firdes.WIN_RECTANGULAR
+    ymax: '-5'
+    ymin: '-77'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 156.0]
+    rotation: 0
+    state: true
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: 0,0,1,4
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    srate: sample_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.4'
+    tr_mode: qtgui.TRIG_MODE_NORM
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1.25'
+    ymin: '-1.25'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 76.0]
+    rotation: 0
+    state: true
+- name: snippet_0
+  id: snippet
+  parameters:
+    alias: ''
+    code: 'print("Starting client and GUI")
+
+      import threading
+
+      threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
+
+      # threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()'
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 196.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://192.168.137.8:5555
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 116.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_throttle_0, '0', qtgui_time_sink_x_0, '0']
+- [zeromq_sub_source_0, '0', blocks_throttle_0, '0']
+- [zeromq_sub_source_0, '0', qtgui_freq_sink_x_0, '0']
+
+metadata:
+  file_format: 1

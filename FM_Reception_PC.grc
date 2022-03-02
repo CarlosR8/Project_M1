@@ -1,6 +1,6 @@
 options:
   parameters:
-    author: ''
+    author: cmrivera
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -8,9 +8,9 @@ options:
     description: ''
     gen_cmake: 'On'
     gen_linking: dynamic
-    generate_options: no_gui
+    generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: radio_streaming_PC
+    id: FM_Reception_PC
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -18,16 +18,16 @@ options:
     realtime_scheduling: ''
     run: 'True'
     run_command: '{python} -u {filename}'
-    run_options: run
+    run_options: prompt
     sizing_mode: fixed
-    thread_safe_setters: '1'
-    title: radio_streaming_PC
-    window_size: ''
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 12.0]
+    coordinate: [8, 12.0]
     rotation: 0
     state: enabled
 
@@ -41,7 +41,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [208, 12.0]
+    coordinate: [176, 12.0]
     rotation: 0
     state: enabled
 - name: station
@@ -53,7 +53,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [304, 12.0]
+    coordinate: [264, 12.0]
     rotation: 0
     state: true
 - name: stream_variable
@@ -65,7 +65,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 12.0]
+    coordinate: [360, 12.0]
     rotation: 0
     state: true
 - name: audio_sink_0
@@ -82,7 +82,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 124.0]
+    coordinate: [288, 156.0]
     rotation: 0
     state: true
 - name: epy_module_GUI
@@ -119,7 +119,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 316.0]
+    coordinate: [8, 300.0]
     rotation: 0
     state: true
 - name: epy_module_client
@@ -165,7 +165,87 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 268.0]
+    coordinate: [8, 252.0]
+    rotation: 0
+    state: true
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '8192'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 76.0]
     rotation: 0
     state: true
 - name: snippet_0
@@ -174,7 +254,7 @@ blocks:
     alias: ''
     code: 'print("Starting client and GUI")
 
-      #import threading
+      import threading
 
       threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
 
@@ -186,7 +266,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 204.0]
+    coordinate: [8, 188.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
@@ -207,12 +287,13 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 108.0]
+    coordinate: [8, 108.0]
     rotation: 0
     state: true
 
 connections:
 - [zeromq_sub_source_0, '0', audio_sink_0, '0']
+- [zeromq_sub_source_0, '0', qtgui_freq_sink_x_0, '0']
 
 metadata:
   file_format: 1
