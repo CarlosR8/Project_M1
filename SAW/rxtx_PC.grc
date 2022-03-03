@@ -217,7 +217,7 @@ blocks:
     gui_hint: 5,2,1,2
     label: 'Offset          '
     type: real
-    value: '0'
+    value: '0.5'
   states:
     bus_sink: false
     bus_source: false
@@ -226,11 +226,38 @@ blocks:
     rotation: 0
     state: enabled
 - name: sample_rate
+  id: variable
+  parameters:
+    comment: sample_rate = sample_rate_osmosdr
+    value: sample_rate_osmosdr
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 12.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate_gr
+  id: variable_qtgui_entry
+  parameters:
+    comment: 6,2,1,2
+    gui_hint: 6,2,1,2
+    label: Sample rate gr-rpitx
+    type: real
+    value: 200e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 260.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate_osmosdr
   id: variable_qtgui_entry
   parameters:
     comment: 7,2,1,2
     gui_hint: 7,2,1,2
-    label: 'Sample rate '
+    label: Sample rate Osmosdr
     type: real
     value: 1.152e6
   states:
@@ -240,18 +267,6 @@ blocks:
     coordinate: [920, 356.0]
     rotation: 0
     state: enabled
-- name: sample_rate
-  id: variable
-  parameters:
-    comment: ''
-    value: 48e3
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [176, 12.0]
-    rotation: 0
-    state: disabled
 - name: waveform_
   id: variable_qtgui_chooser
   parameters:
@@ -307,25 +322,40 @@ blocks:
     alias: ''
     comment: ''
     source_code: "# this module will be imported in the into your flowgraph\nimport\
-      \ socket\n\ndef client(tt):\n    while True:\n        # Storage variables initial\
-      \ values\n        variables=[\"frequency_\",\"waveform_\",\"amplitude_\",\"\
-      offset_\",\"sample_rate\",\"carrying_frequency\",\"measured_frequency\"]\n \
-      \       old_values=[]\n        new_values=[]\n        for variable in variables:\n\
-      \            exec(\"old_values.append(tt.get_{}())\".format(variable))\n   \
-      \     \n        new_values = old_values\n        # Try to connect\n        host\
-      \ = '192.168.137.8'\n        port = 4242\n        client_socket = socket.socket()\n\
-      \        client_socket.connect((host, port))\n        if(client_socket.getsockname()[0]\
-      \ != \"0.0.0.0\"):\n            # Connected\n            print(\"Connected to\
-      \ server\")\n            while True:\n                # Check if variables have\
-      \ changed\n                for i, variable in enumerate(variables):\n      \
-      \              if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
+      \ socket\nfrom gnuradio import eng_notation\nfrom PyQt5 import Qt\n\ndef client(tt):\n\
+      \    while True:\n        # Storage variables initial values\n        variables=[\"\
+      frequency_\",\"waveform_\",\"amplitude_\",\"offset_\",\"sample_rate_gr\",\"\
+      sample_rate_osmosdr\",\"carrying_frequency\",\"measured_frequency\"]\n     \
+      \   old_values=[]\n        for variable in variables:\n            exec(\"old_values.append(tt.get_{}())\"\
+      .format(variable))\n        # Try to connect\n        host = '192.168.137.8'\n\
+      \        port = 4242\n        client_socket = socket.socket()\n        client_socket.connect((host,\
+      \ port))\n        if(client_socket.getsockname()[0] != \"0.0.0.0\"):\n     \
+      \       # Connected\n            print(\"Connected to server\")\n          \
+      \  while True:\n                # Check if variables have changed to send the\
+      \ new values\n                for i, variable in enumerate(variables):\n   \
+      \                 if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
       \                        value=eval(\"tt.get_{}()\".format(variable))\n    \
       \                    if(variable==\"waveform_\"):\n                        \
       \    value=value+100\n\n                        message=variable + \"=\" + str(value)\
-      \ + \">\"\n                        client_socket.send(message.encode())\n  \
-      \                      # Register new variable value\n                     \
-      \   old_values[i]=eval(\"tt.get_{}()\".format(variable))\n\n               \
-      \ # client_socket.close()\n"
+      \ + \">\" # Encoding message to send it\n                        client_socket.send(message.encode())\n\
+      \                        # Register updated variable value\n               \
+      \         old_values[i]=eval(\"tt.get_{}()\".format(variable))\n           \
+      \             # testing\n                        # tt._frequency__tool_bar.setStyleSheet(\"\
+      QLabel { }\")\n                        \n                    # Check if \"entry\"\
+      \ controls text has been modified to change its color (indicating pending \"\
+      enter\" key)\n                    try: # To ignore when incorrect value is typed\n\
+      \                        if(variable==\"waveform_\"): # If the current variable\
+      \ is not an \"entry\" ignore\n                            pass\n\n         \
+      \               if(eval(\"eng_notation.str_to_num(str(tt._{var_name}_line_edit.text()))!=float(tt.get_{var_name}())\"\
+      .format(var_name=variable))):\n                            if(eval(\"tt._{}_tool_bar.styleSheet()\"\
+      .format(variable))!=\"QLabel {background-color: yellow}\"):\n              \
+      \                  Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\".format(variable)),\
+      \ \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"QLabel {background-color: yellow}\"\
+      ))\n                        else:\n                            if(eval(\"tt._{}_tool_bar.styleSheet()\"\
+      .format(variable))!=\"\"):\n                                Qt.QMetaObject.invokeMethod(eval(\"\
+      tt._{}_tool_bar\".format(variable)), \"setStyleSheet\", Qt.Q_ARG(\"QString\"\
+      , \"\"))                        \n                    except:\n            \
+      \            pass\n                    \n                # client_socket.close()\n"
   states:
     bus_sink: false
     bus_source: false
@@ -410,7 +440,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [272, 156.0]
+    coordinate: [280, 156.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -484,7 +514,7 @@ blocks:
     tr_chan: '0'
     tr_delay: '0'
     tr_level: '0.4'
-    tr_mode: qtgui.TRIG_MODE_NORM
+    tr_mode: qtgui.TRIG_MODE_FREE
     tr_slope: qtgui.TRIG_SLOPE_POS
     tr_tag: '""'
     type: complex
