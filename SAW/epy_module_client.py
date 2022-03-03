@@ -32,7 +32,8 @@ def client(tt):
                         old_values[i]=eval("tt.get_{}()".format(variable))
                         # testing
                         # tt._frequency__tool_bar.setStyleSheet("QLabel { }")
-                        
+
+                    # Pending changes indicator:  
                     # Check if "entry" controls text has been modified to change its color (indicating pending "enter" key)
                     try: # To ignore when incorrect value is typed
                         if(variable=="waveform_"): # If the current variable is not an "entry" ignore
@@ -40,11 +41,13 @@ def client(tt):
 
                         if(eval("eng_notation.str_to_num(str(tt._{var_name}_line_edit.text()))!=float(tt.get_{var_name}())".format(var_name=variable))):
                             if(eval("tt._{}_tool_bar.styleSheet()".format(variable))!="QLabel {background-color: yellow}"):
+                                # To avoid conflict between GUI thread and Working thread (segmentation error) it must be used the invokeMethod function
+                                # https://stackoverflow.com/questions/37598016/qapplication-method-setstylesheet-called-from-other-thread-causes-segmentation-f
                                 Qt.QMetaObject.invokeMethod(eval("tt._{}_tool_bar".format(variable)), "setStyleSheet", Qt.Q_ARG("QString", "QLabel {background-color: yellow}"))
                         else:
                             if(eval("tt._{}_tool_bar.styleSheet()".format(variable))!=""):
                                 Qt.QMetaObject.invokeMethod(eval("tt._{}_tool_bar".format(variable)), "setStyleSheet", Qt.Q_ARG("QString", ""))                        
                     except:
                         pass
-                    
+
                 # client_socket.close()

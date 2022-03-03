@@ -215,7 +215,7 @@ blocks:
   parameters:
     comment: 5,2,1,2
     gui_hint: 5,2,1,2
-    label: 'Offset          '
+    label: 'Offset                        '
     type: real
     value: '0.5'
   states:
@@ -242,7 +242,7 @@ blocks:
   parameters:
     comment: 6,2,1,2
     gui_hint: 6,2,1,2
-    label: Sample rate gr-rpitx
+    label: 'Sample rate gr-rpitx  '
     type: real
     value: 200e3
   states:
@@ -272,7 +272,7 @@ blocks:
   parameters:
     comment: 4,2,1,2
     gui_hint: 4,2,1,2
-    label: 'Waveform   '
+    label: 'Waveform                 '
     label0: Constant
     label1: ''
     label2: ''
@@ -341,21 +341,25 @@ blocks:
       \                        # Register updated variable value\n               \
       \         old_values[i]=eval(\"tt.get_{}()\".format(variable))\n           \
       \             # testing\n                        # tt._frequency__tool_bar.setStyleSheet(\"\
-      QLabel { }\")\n                        \n                    # Check if \"entry\"\
-      \ controls text has been modified to change its color (indicating pending \"\
-      enter\" key)\n                    try: # To ignore when incorrect value is typed\n\
-      \                        if(variable==\"waveform_\"): # If the current variable\
-      \ is not an \"entry\" ignore\n                            pass\n\n         \
-      \               if(eval(\"eng_notation.str_to_num(str(tt._{var_name}_line_edit.text()))!=float(tt.get_{var_name}())\"\
+      QLabel { }\")\n\n                    # Pending changes indicator:  \n      \
+      \              # Check if \"entry\" controls text has been modified to change\
+      \ its color (indicating pending \"enter\" key)\n                    try: # To\
+      \ ignore when incorrect value is typed\n                        if(variable==\"\
+      waveform_\"): # If the current variable is not an \"entry\" ignore\n       \
+      \                     pass\n\n                        if(eval(\"eng_notation.str_to_num(str(tt._{var_name}_line_edit.text()))!=float(tt.get_{var_name}())\"\
       .format(var_name=variable))):\n                            if(eval(\"tt._{}_tool_bar.styleSheet()\"\
       .format(variable))!=\"QLabel {background-color: yellow}\"):\n              \
-      \                  Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\".format(variable)),\
-      \ \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"QLabel {background-color: yellow}\"\
-      ))\n                        else:\n                            if(eval(\"tt._{}_tool_bar.styleSheet()\"\
-      .format(variable))!=\"\"):\n                                Qt.QMetaObject.invokeMethod(eval(\"\
-      tt._{}_tool_bar\".format(variable)), \"setStyleSheet\", Qt.Q_ARG(\"QString\"\
-      , \"\"))                        \n                    except:\n            \
-      \            pass\n                    \n                # client_socket.close()\n"
+      \                  # To avoid conflict between GUI thread and Working thread\
+      \ (segmentation error) it must be used the invokeMethod function\n         \
+      \                       # https://stackoverflow.com/questions/37598016/qapplication-method-setstylesheet-called-from-other-thread-causes-segmentation-f\n\
+      \                                Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\"\
+      .format(variable)), \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"QLabel {background-color:\
+      \ yellow}\"))\n                        else:\n                            if(eval(\"\
+      tt._{}_tool_bar.styleSheet()\".format(variable))!=\"\"):\n                 \
+      \               Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\".format(variable)),\
+      \ \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"\"))                        \n\
+      \                    except:\n                        pass\n\n             \
+      \   # client_socket.close()\n"
   states:
     bus_sink: false
     bus_source: false
