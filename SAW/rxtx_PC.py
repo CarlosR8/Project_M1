@@ -74,9 +74,11 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
         self.waveform_ = waveform_ = 3
-        self.sample_rate = sample_rate = 1.152e6
-        self.offset_ = offset_ = 0
+        self.sample_rate_gr = sample_rate_gr = 200e3
+        self.sample_rate = sample_rate = sample_rate_osmosdr
+        self.offset_ = offset_ = 0.5
         self.measured_frequency = measured_frequency = 434e6
         self.frequency_ = frequency_ = 86.8e6
         self.carrying_frequency = carrying_frequency = 86.8e6
@@ -85,17 +87,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._sample_rate_tool_bar = Qt.QToolBar(self)
-        self._sample_rate_tool_bar.addWidget(Qt.QLabel('Sample rate ' + ": "))
-        self._sample_rate_line_edit = Qt.QLineEdit(str(self.sample_rate))
-        self._sample_rate_tool_bar.addWidget(self._sample_rate_line_edit)
-        self._sample_rate_line_edit.returnPressed.connect(
-            lambda: self.set_sample_rate(eng_notation.str_to_num(str(self._sample_rate_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._sample_rate_tool_bar, 7, 2, 1, 2)
-        for r in range(7, 8):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(2, 4):
-            self.top_grid_layout.setColumnStretch(c, 1)
         self._measured_frequency_tool_bar = Qt.QToolBar(self)
         self._measured_frequency_tool_bar.addWidget(Qt.QLabel('Measured Frequency  ' + ": "))
         self._measured_frequency_line_edit = Qt.QLineEdit(str(self.measured_frequency))
@@ -128,6 +119,28 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._sample_rate_osmosdr_tool_bar = Qt.QToolBar(self)
+        self._sample_rate_osmosdr_tool_bar.addWidget(Qt.QLabel('Sample rate Osmosdr' + ": "))
+        self._sample_rate_osmosdr_line_edit = Qt.QLineEdit(str(self.sample_rate_osmosdr))
+        self._sample_rate_osmosdr_tool_bar.addWidget(self._sample_rate_osmosdr_line_edit)
+        self._sample_rate_osmosdr_line_edit.returnPressed.connect(
+            lambda: self.set_sample_rate_osmosdr(eng_notation.str_to_num(str(self._sample_rate_osmosdr_line_edit.text()))))
+        self.top_grid_layout.addWidget(self._sample_rate_osmosdr_tool_bar, 7, 2, 1, 2)
+        for r in range(7, 8):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(2, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._sample_rate_gr_tool_bar = Qt.QToolBar(self)
+        self._sample_rate_gr_tool_bar.addWidget(Qt.QLabel('Sample rate gr-rpitx' + ": "))
+        self._sample_rate_gr_line_edit = Qt.QLineEdit(str(self.sample_rate_gr))
+        self._sample_rate_gr_tool_bar.addWidget(self._sample_rate_gr_line_edit)
+        self._sample_rate_gr_line_edit.returnPressed.connect(
+            lambda: self.set_sample_rate_gr(eng_notation.str_to_num(str(self._sample_rate_gr_line_edit.text()))))
+        self.top_grid_layout.addWidget(self._sample_rate_gr_tool_bar, 6, 2, 1, 2)
+        for r in range(6, 7):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(2, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
             1024, #size
             sample_rate, #samp_rate
@@ -140,7 +153,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
         self.qtgui_time_sink_x_0.enable_tags(True)
-        self.qtgui_time_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_NORM, qtgui.TRIG_SLOPE_POS, 0.4, 0, 0, "")
+        self.qtgui_time_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.4, 0, 0, "")
         self.qtgui_time_sink_x_0.enable_autoscale(False)
         self.qtgui_time_sink_x_0.enable_grid(True)
         self.qtgui_time_sink_x_0.enable_axis_labels(True)
@@ -286,6 +299,14 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
+    def get_sample_rate_osmosdr(self):
+        return self.sample_rate_osmosdr
+
+    def set_sample_rate_osmosdr(self, sample_rate_osmosdr):
+        self.sample_rate_osmosdr = sample_rate_osmosdr
+        self.set_sample_rate(self.sample_rate_osmosdr)
+        Qt.QMetaObject.invokeMethod(self._sample_rate_osmosdr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.sample_rate_osmosdr)))
+
     def get_waveform_(self):
         return self.waveform_
 
@@ -293,12 +314,18 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.waveform_ = waveform_
         self._waveform__callback(self.waveform_)
 
+    def get_sample_rate_gr(self):
+        return self.sample_rate_gr
+
+    def set_sample_rate_gr(self, sample_rate_gr):
+        self.sample_rate_gr = sample_rate_gr
+        Qt.QMetaObject.invokeMethod(self._sample_rate_gr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.sample_rate_gr)))
+
     def get_sample_rate(self):
         return self.sample_rate
 
     def set_sample_rate(self, sample_rate):
         self.sample_rate = sample_rate
-        Qt.QMetaObject.invokeMethod(self._sample_rate_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.sample_rate)))
         self.blocks_throttle_0.set_sample_rate(self.sample_rate)
         self.qtgui_freq_sink_x_0.set_frequency_range(self.measured_frequency, self.sample_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.sample_rate)

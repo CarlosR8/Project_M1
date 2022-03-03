@@ -34,7 +34,8 @@ class rx_Pi(gr.top_block):
         # Variables
         ##################################################
         self.waveform_ = waveform_ = 103
-        self.sample_rate = sample_rate = 1.152e6
+        self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
+        self.sample_rate_gr = sample_rate_gr = 200e3
         self.offset_ = offset_ = 0.5
         self.measured_frequency = measured_frequency = 434e6
         self.frequency_ = frequency_ = 86.8e6
@@ -45,12 +46,12 @@ class rx_Pi(gr.top_block):
         # Blocks
         ##################################################
         self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, 'tcp://192.168.137.8:5555', 100, False, -1)
-        self.rpitx_rpitx_sink_0 = rpitx.rpitx_sink(sample_rate, carrying_frequency)
+        self.rpitx_rpitx_sink_0 = rpitx.rpitx_sink(sample_rate_gr, carrying_frequency)
         self.osmosdr_source_0 = osmosdr.source(
             args="numchan=" + str(1) + " " + ""
         )
         self.osmosdr_source_0.set_time_unknown_pps(osmosdr.time_spec_t())
-        self.osmosdr_source_0.set_sample_rate(sample_rate)
+        self.osmosdr_source_0.set_sample_rate(sample_rate_osmosdr)
         self.osmosdr_source_0.set_center_freq(measured_frequency, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)
         self.osmosdr_source_0.set_dc_offset_mode(0, 0)
@@ -62,7 +63,7 @@ class rx_Pi(gr.top_block):
         self.osmosdr_source_0.set_antenna('', 0)
         self.osmosdr_source_0.set_bandwidth(0, 0)
         self.blocks_magphase_to_complex_0 = blocks.magphase_to_complex(1)
-        self.analog_sig_source_x_0 = analog.sig_source_f(sample_rate, waveform_, frequency_, amplitude_, offset_, 0)
+        self.analog_sig_source_x_0 = analog.sig_source_f(sample_rate_gr, waveform_, frequency_, amplitude_, offset_, 0)
         self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 0)
 
 
@@ -82,13 +83,19 @@ class rx_Pi(gr.top_block):
         self.waveform_ = waveform_
         self.analog_sig_source_x_0.set_waveform(self.waveform_)
 
-    def get_sample_rate(self):
-        return self.sample_rate
+    def get_sample_rate_osmosdr(self):
+        return self.sample_rate_osmosdr
 
-    def set_sample_rate(self, sample_rate):
-        self.sample_rate = sample_rate
-        self.analog_sig_source_x_0.set_sampling_freq(self.sample_rate)
-        self.osmosdr_source_0.set_sample_rate(self.sample_rate)
+    def set_sample_rate_osmosdr(self, sample_rate_osmosdr):
+        self.sample_rate_osmosdr = sample_rate_osmosdr
+        self.osmosdr_source_0.set_sample_rate(self.sample_rate_osmosdr)
+
+    def get_sample_rate_gr(self):
+        return self.sample_rate_gr
+
+    def set_sample_rate_gr(self, sample_rate_gr):
+        self.sample_rate_gr = sample_rate_gr
+        self.analog_sig_source_x_0.set_sampling_freq(self.sample_rate_gr)
 
     def get_offset_(self):
         return self.offset_
