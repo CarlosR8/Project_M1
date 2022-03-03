@@ -215,7 +215,7 @@ blocks:
   parameters:
     comment: 5,2,1,2
     gui_hint: 5,2,1,2
-    label: 'Offset          '
+    label: 'Offset                        '
     type: real
     value: '0.5'
   states:
@@ -242,7 +242,7 @@ blocks:
   parameters:
     comment: 6,2,1,2
     gui_hint: 6,2,1,2
-    label: Sample rate gr-rpitx
+    label: 'Sample rate gr-rpitx  '
     type: real
     value: 200e3
   states:
@@ -272,7 +272,7 @@ blocks:
   parameters:
     comment: 4,2,1,2
     gui_hint: 4,2,1,2
-    label: 'Waveform   '
+    label: 'Waveform                  '
     label0: Constant
     label1: ''
     label2: ''
@@ -328,10 +328,11 @@ blocks:
       sample_rate_osmosdr\",\"carrying_frequency\",\"measured_frequency\"]\n     \
       \   old_values=[]\n        for variable in variables:\n            exec(\"old_values.append(tt.get_{}())\"\
       .format(variable))\n        # Try to connect\n        host = '192.168.137.8'\n\
-      \        port = 4242\n        client_socket = socket.socket()\n        client_socket.connect((host,\
-      \ port))\n        if(client_socket.getsockname()[0] != \"0.0.0.0\"):\n     \
-      \       # Connected\n            print(\"Connected to server\")\n          \
-      \  while True:\n                # Check if variables have changed to send the\
+      \        port = 4242\n        client_socket = socket.socket()\n        try:\n\
+      \            client_socket.connect((host, port))\n        except:\n        \
+      \    pass\n        if(client_socket.getsockname()[0] != \"0.0.0.0\"):\n    \
+      \        # Connected\n            print(\"Connected to server\")\n         \
+      \   while True:\n                # Check if variables have changed to send the\
       \ new values\n                for i, variable in enumerate(variables):\n   \
       \                 if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
       \                        value=eval(\"tt.get_{}()\".format(variable))\n    \

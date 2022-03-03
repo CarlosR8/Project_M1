@@ -105,7 +105,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self._waveform__labels = ['Constant', 'Sine', 'Cosine', 'Square', 'Triangle', 'Saw Tooth']
         # Create the combo box
         self._waveform__tool_bar = Qt.QToolBar(self)
-        self._waveform__tool_bar.addWidget(Qt.QLabel('Waveform   ' + ": "))
+        self._waveform__tool_bar.addWidget(Qt.QLabel('Waveform                  ' + ": "))
         self._waveform__combo_box = Qt.QComboBox()
         self._waveform__tool_bar.addWidget(self._waveform__combo_box)
         for _label in self._waveform__labels: self._waveform__combo_box.addItem(_label)
@@ -131,7 +131,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
         self._sample_rate_gr_tool_bar = Qt.QToolBar(self)
-        self._sample_rate_gr_tool_bar.addWidget(Qt.QLabel('Sample rate gr-rpitx' + ": "))
+        self._sample_rate_gr_tool_bar.addWidget(Qt.QLabel('Sample rate gr-rpitx  ' + ": "))
         self._sample_rate_gr_line_edit = Qt.QLineEdit(str(self.sample_rate_gr))
         self._sample_rate_gr_tool_bar.addWidget(self._sample_rate_gr_line_edit)
         self._sample_rate_gr_line_edit.returnPressed.connect(
@@ -240,7 +240,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         for c in range(0, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
         self._offset__tool_bar = Qt.QToolBar(self)
-        self._offset__tool_bar.addWidget(Qt.QLabel('Offset          ' + ": "))
+        self._offset__tool_bar.addWidget(Qt.QLabel('Offset                        ' + ": "))
         self._offset__line_edit = Qt.QLineEdit(str(self.offset_))
         self._offset__tool_bar.addWidget(self._offset__line_edit)
         self._offset__line_edit.returnPressed.connect(
