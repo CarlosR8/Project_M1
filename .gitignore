@@ -1,2 +1,4 @@
-/__pycache__
-/Symbolic links/
+__pycache__/
+Symbolic links/
+# git rm --cached -r .
+# git add .
