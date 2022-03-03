@@ -323,17 +323,22 @@ blocks:
     comment: ''
     source_code: "# this module will be imported in the into your flowgraph\nimport\
       \ socket\nfrom gnuradio import eng_notation\nfrom PyQt5 import Qt\n\ndef client(tt):\n\
-      \    while True:\n        # Storage variables initial values\n        variables=[\"\
-      frequency_\",\"waveform_\",\"amplitude_\",\"offset_\",\"sample_rate_gr\",\"\
-      sample_rate_osmosdr\",\"carrying_frequency\",\"measured_frequency\"]\n     \
-      \   old_values=[]\n        for variable in variables:\n            exec(\"old_values.append(tt.get_{}())\"\
-      .format(variable))\n        # Try to connect\n        host = '192.168.137.8'\n\
-      \        port = 4242\n        client_socket = socket.socket()\n        client_socket.connect((host,\
-      \ port))\n        if(client_socket.getsockname()[0] != \"0.0.0.0\"):\n     \
-      \       # Connected\n            print(\"Connected to server\")\n          \
-      \  while True:\n                # Check if variables have changed to send the\
-      \ new values\n                for i, variable in enumerate(variables):\n   \
-      \                 if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
+      \    # Storage variables initial values\n    variables=[\"frequency_\",\"waveform_\"\
+      ,\"amplitude_\",\"offset_\",\"sample_rate_gr\",\"sample_rate_osmosdr\",\"carrying_frequency\"\
+      ,\"measured_frequency\"]\n    old_values=[]\n    for variable in variables:\n\
+      \        exec(\"old_values.append(tt.get_{}())\".format(variable))\n       \
+      \ # Convert default values of entry controls to eng notation \n        if(variable\
+      \ == \"waveform_\"):\n            continue # Skip if not an entry control\n\
+      \        Qt.QMetaObject.invokeMethod(eval(\"tt._{}_line_edit\".format(variable)),\
+      \ \"setText\", Qt.Q_ARG(\"QString\", eng_notation.num_to_str(eval(\"tt.{}\"\
+      .format(variable)))))\n    while True:\n        # Try to connect\n        host\
+      \ = '192.168.137.8'\n        port = 4242\n        client_socket = socket.socket()\n\
+      \        try:\n            client_socket.connect((host, port))\n        except:\n\
+      \            pass\n        if(client_socket.getsockname()[0] != \"0.0.0.0\"\
+      ):\n            # Connected\n            print(\"Connected to server\")\n  \
+      \          while True:\n                # Check if variables have changed to\
+      \ send the new values\n                for i, variable in enumerate(variables):\n\
+      \                    if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
       \                        value=eval(\"tt.get_{}()\".format(variable))\n    \
       \                    if(variable==\"waveform_\"):\n                        \
       \    value=value+100\n\n                        message=variable + \"=\" + str(value)\

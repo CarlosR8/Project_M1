@@ -4,12 +4,16 @@ from gnuradio import eng_notation
 from PyQt5 import Qt
 
 def client(tt):
+    # Storage variables initial values
+    variables=["frequency_","waveform_","amplitude_","offset_","sample_rate_gr","sample_rate_osmosdr","carrying_frequency","measured_frequency"]
+    old_values=[]
+    for variable in variables:
+        exec("old_values.append(tt.get_{}())".format(variable))
+        # Convert default values of entry controls to eng notation 
+        if(variable == "waveform_"):
+            continue # Skip if not an entry control
+        Qt.QMetaObject.invokeMethod(eval("tt._{}_line_edit".format(variable)), "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(eval("tt.{}".format(variable)))))
     while True:
-        # Storage variables initial values
-        variables=["frequency_","waveform_","amplitude_","offset_","sample_rate_gr","sample_rate_osmosdr","carrying_frequency","measured_frequency"]
-        old_values=[]
-        for variable in variables:
-            exec("old_values.append(tt.get_{}())".format(variable))
         # Try to connect
         host = '192.168.137.8'
         port = 4242
