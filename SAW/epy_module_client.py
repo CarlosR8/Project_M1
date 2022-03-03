@@ -14,7 +14,10 @@ def client(tt):
         host = '192.168.137.8'
         port = 4242
         client_socket = socket.socket()
-        client_socket.connect((host, port))
+        try:
+            client_socket.connect((host, port))
+        except:
+            pass
         if(client_socket.getsockname()[0] != "0.0.0.0"):
             # Connected
             print("Connected to server")

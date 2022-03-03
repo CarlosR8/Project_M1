@@ -32,19 +32,67 @@ options:
     state: enabled
 
 blocks:
-- name: frequency_
+- name: amplitude_
   id: variable
   parameters:
     comment: ''
-    value: 5e3
+    value: '0.4'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 12.0]
+    coordinate: [520, 12.0]
     rotation: 0
     state: true
-- name: sample_rate
+- name: carrying_frequency
+  id: variable
+  parameters:
+    comment: ''
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [704, 12.0]
+    rotation: 0
+    state: true
+- name: frequency_
+  id: variable
+  parameters:
+    comment: ''
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 12.0]
+    rotation: 0
+    state: true
+- name: measured_frequency
+  id: variable
+  parameters:
+    comment: ''
+    value: 434e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 12.0]
+    rotation: 0
+    state: true
+- name: offset_
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 12.0]
+    rotation: 0
+    state: true
+- name: sample_rate_gr
   id: variable
   parameters:
     comment: ''
@@ -56,26 +104,38 @@ blocks:
     coordinate: [208, 12.0]
     rotation: 0
     state: enabled
-- name: waveform_
+- name: sample_rate_osmosdr
   id: variable
   parameters:
-    comment: 'Constant = 0
-
-      Sine = 1
-
-      Cosine = 2
-
-      Square = 3
-
-      Triangle = 4
-
-      Saw Tooth = 5'
-    value: '3'
+    comment: ''
+    value: 1.152e6
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 12.0]
+    coordinate: [840, 12.0]
+    rotation: 0
+    state: enabled
+- name: waveform_
+  id: variable
+  parameters:
+    comment: 'Constant = 100
+
+      Sine = 101
+
+      Cosine = 102
+
+      Square = 103
+
+      Triangle = 104
+
+      Saw Tooth = 105'
+    value: '103'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 12.0]
     rotation: 0
     state: true
 - name: analog_const_source_x_0
@@ -100,14 +160,14 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    amp: 400e-3
+    amp: amplitude_
     comment: ''
     freq: frequency_
     maxoutbuf: '0'
     minoutbuf: '0'
-    offset: 500e-3
+    offset: offset_
     phase: '0'
-    samp_rate: sample_rate
+    samp_rate: sample_rate_gr
     type: float
     waveform: waveform_
   states:
@@ -130,7 +190,59 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 168.0]
+    coordinate: [296, 160.0]
+    rotation: 0
+    state: true
+- name: epy_module_server
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: "# this module will be imported in the into your flowgraph\nimport\
+      \ socket\n# import string\nimport json  # To save variables as json\nimport\
+      \ ntpath  # To retrieve file name out of address\nimport os.path\nfrom os import\
+      \ path\n\n# Declaring class for \"shared variable\" object (communication between\
+      \ flowcharts)\nclass Shared_Variable:\n\tnames = [] # List of variable names\n\
+      \tvalues = [] # List of variable values\n\tshared_variables = [] # List of variables\
+      \ set on init\n\tdef __init__(self,shared_variables_):\n\t\tself.shared_variables\
+      \ = shared_variables_\n\t\tpass\n\tdef clear(self):\n\t\tself.names = []\n\t\
+      \tself.values = []\n\tdef save_variables(self, tt):\n\t\t# try:\n\t\t\tself.clear()\n\
+      \t\t\tfor variable in self.shared_variables:\n\t\t\t\tself.names.append(variable)\n\
+      \t\t\t\tself.values.append(eval(\"tt.get_{}()\".format(variable)))\n\t\t\t#\
+      \ Saving in json file\n\t\t\tf = open(\"shared_variables.json\", \"w\")\n\t\t\
+      \tf.write(json.dumps(self.__dict__))\n\t\t\tf.close()\n\t\t# except:\n\t\t#\
+      \ \tpass\n\tdef retrieve_variables(self, tt):\n\t\t# Check if file exist\n\t\
+      \tif(path.exists(\"shared_variables.json\")):\n\t\t\twith open(\"shared_variables.json\"\
+      ) as f:\n\t\t\t\tcontent = f.readline()\n\t\t\t\tself.__dict__ = json.loads(content)\n\
+      \t\t\t# Once read, remove it\t\n\t\t\tos.remove(\"shared_variables.json\")\t\
+      \n\t\t\n# \n\ndef server(tt):\n\twhile True:\n\t\t# Create list of shared variables\n\
+      \t\tshared_variables = [\"sample_rate_osmosdr\",\"measured_frequency\"]\n\t\t\
+      sFile = Shared_Variable(shared_variables)\n\t\t#Save current local variables\
+      \ to share them\n\t\tsFile.save_variables(tt)\n\n\t\t# Configure socket\n\t\t\
+      sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n\t\tsock.setsockopt(socket.SOL_SOCKET,\
+      \ socket.SO_REUSEADDR, 1)\n\t\tsock.bind(('192.168.137.8',4242))\n\t\t# Listen\n\
+      \t\tprint(\"Waiting for connection...\")\n\t\tsock.listen(1)\n\t\t# Connected\n\
+      \t\tconn,addr=sock.accept()\n\t\twith conn:\n\t\t\tprint('Connected from: ',\
+      \ addr)\n\t\t\tmessage = \"\" # Variable to store complete message\n\t\t\twhile\
+      \ True:\n\t\t\t\t# Get text\n\t\t\t\tdata=conn.recv(1)\n\t\t\t\tif data:\n\t\
+      \t\t\t\tdata=data.decode()\n\t\t\t\t\tmessage = message+data\n\t\t\t\t\t# print(message)\n\
+      \t\t\t\t\tif '>' in message: # Delimeter to indicate end of message\n\t\t\t\t\
+      \t\ttry:\n\t\t\t\t\t\t\t# Changing local variables\n\t\t\t\t\t\t\tmessage =\
+      \ message.replace('>','').strip()\n\t\t\t\t\t\t\t[var_name, var_value] = message.split(\"\
+      =\")\n\t\t\t\t\t\t\tcommand = \"tt.set_{}(float({}))\".format(var_name, var_value)\n\
+      \t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tprint(\"The new value of the variable\
+      \ {} is: {}\".format(var_name, var_value))\n\t\t\t\t\t\t\tmessage = \"\" # Reset\
+      \ message variable\n\n\t\t\t\t\t\t\t# Save current values on \"shared variables\"\
+      \ file\n\t\t\t\t\t\t\tsFile.save_variables(tt)\n\t\t\t\t\t\texcept:\n\t\t\t\t\
+      \t\t\tmessage = \"\" # Reset message variable\n\t\t\t\t\t\t\tprint(\"Error:\
+      \ variable not set\")\t\t\t\t\t\t\n\t\t\t\t\t# Quit\n\t\t\t\t\tif 'quit' in\
+      \ data:\n\t\t\t\t\t\tprint(\"Closing connection...\")\n\t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\
+      \t\t\t\t\t\tsock.close()\n\t\t\t\t\t\tbreak # Back to listen loop\n\t\t\t# C"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 364.0]
     rotation: 0
     state: true
 - name: rpitx_rpitx_sink_0
@@ -138,14 +250,37 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    carrier_freq: 86.6e6
+    carrier_freq: carrying_frequency
     comment: ''
-    samp_rate: sample_rate
+    samp_rate: sample_rate_gr
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 172.0]
+    coordinate: [592, 164.0]
+    rotation: 0
+    state: true
+- name: snippet_0
+  id: snippet
+  parameters:
+    alias: ''
+    code: 'print("Starting server")
+
+      import threading
+
+      threading.Thread(target=epy_module_server.server,args=(self,)).start()
+
+      from subprocess import Popen
+
+      Popen([''python'', ''rx_Pi.py''])'
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 300.0]
     rotation: 0
     state: true
 
