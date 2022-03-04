@@ -301,7 +301,7 @@ blocks:
     freq7: 100e6
     freq8: 100e6
     freq9: 100e6
-    gain0: '10'
+    gain0: '3'
     gain1: '10'
     gain10: '10'
     gain11: '10'

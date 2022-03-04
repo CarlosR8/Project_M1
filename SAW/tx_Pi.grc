@@ -60,7 +60,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 86.8e6
+    value: '10000'
   states:
     bus_sink: false
     bus_source: false
@@ -130,7 +130,7 @@ blocks:
       Triangle = 104
 
       Saw Tooth = 105'
-    value: '103'
+    value: '101'
   states:
     bus_sink: false
     bus_source: false
@@ -229,15 +229,17 @@ blocks:
       \t\t\t\t\tif '>' in message: # Delimeter to indicate end of message\n\t\t\t\t\
       \t\ttry:\n\t\t\t\t\t\t\t# Changing local variables\n\t\t\t\t\t\t\tmessage =\
       \ message.replace('>','').strip()\n\t\t\t\t\t\t\t[var_name, var_value] = message.split(\"\
-      =\")\n\t\t\t\t\t\t\tcommand = \"tt.set_{}(float({}))\".format(var_name, var_value)\n\
-      \t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tprint(\"The new value of the variable\
-      \ {} is: {}\".format(var_name, var_value))\n\t\t\t\t\t\t\tmessage = \"\" # Reset\
-      \ message variable\n\n\t\t\t\t\t\t\t# Save current values on \"shared variables\"\
-      \ file\n\t\t\t\t\t\t\tsFile.save_variables(tt)\n\t\t\t\t\t\texcept:\n\t\t\t\t\
-      \t\t\tmessage = \"\" # Reset message variable\n\t\t\t\t\t\t\tprint(\"Error:\
-      \ variable not set\")\t\t\t\t\t\t\n\t\t\t\t\t# Quit\n\t\t\t\t\tif 'quit' in\
-      \ data:\n\t\t\t\t\t\tprint(\"Closing connection...\")\n\t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\
-      \t\t\t\t\t\tsock.close()\n\t\t\t\t\t\tbreak # Back to listen loop\n\t\t\t# C"
+      =\")\n\t\t\t\t\t\t\tcommand = \"tt.{}=float({})\".format(var_name, var_value)\n\
+      \t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tcommand = \"tt.set_{}(float({}))\"\
+      .format(var_name, var_value)\n\t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tprint(\"\
+      The new value of the variable {} is: {}\".format(var_name, var_value))\n\t\t\
+      \t\t\t\t\tmessage = \"\" # Reset message variable\n\n\t\t\t\t\t\t\t# Save current\
+      \ values on \"shared variables\" file\n\t\t\t\t\t\t\tsFile.save_variables(tt)\n\
+      \t\t\t\t\t\texcept:\n\t\t\t\t\t\t\tmessage = \"\" # Reset message variable\n\
+      \t\t\t\t\t\t\tprint(\"Error: variable not set\")\t\t\t\t\t\t\n\t\t\t\t\t# Quit\n\
+      \t\t\t\t\tif 'quit' in data:\n\t\t\t\t\t\tprint(\"Closing connection...\")\n\
+      \t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\t\t\t\t\t\tsock.close()\n\t\t\t\
+      \t\t\tbreak # Back to listen loop\n\t\t\t# C"
   states:
     bus_sink: false
     bus_source: false

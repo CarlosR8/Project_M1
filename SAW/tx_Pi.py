@@ -30,12 +30,12 @@ class tx_Pi(gr.top_block):
         ##################################################
         # Variables
         ##################################################
-        self.waveform_ = waveform_ = 103
+        self.waveform_ = waveform_ = 101
         self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
         self.sample_rate_gr = sample_rate_gr = 200e3
         self.offset_ = offset_ = 0.5
         self.measured_frequency = measured_frequency = 434e6
-        self.frequency_ = frequency_ = 86.8e6
+        self.frequency_ = frequency_ = 10000
         self.carrying_frequency = carrying_frequency = 86.8e6
         self.amplitude_ = amplitude_ = 0.4
 

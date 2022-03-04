@@ -72,6 +72,8 @@ def server(tt):
 							# Changing local variables
 							message = message.replace('>','').strip()
 							[var_name, var_value] = message.split("=")
+							command = "tt.{}=float({})".format(var_name, var_value)
+							exec(command) 
 							command = "tt.set_{}(float({}))".format(var_name, var_value)
 							exec(command) 
 							print("The new value of the variable {} is: {}".format(var_name, var_value))

@@ -27,7 +27,6 @@ from gnuradio import eng_notation
 from gnuradio import qtgui
 from gnuradio.filter import firdes
 import sip
-from gnuradio import blocks
 from gnuradio import gr
 import sys
 import signal
@@ -75,12 +74,12 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
-        self.waveform_ = waveform_ = 3
+        self.waveform_ = waveform_ = 2
         self.sample_rate_gr = sample_rate_gr = 200e3
         self.sample_rate = sample_rate = sample_rate_osmosdr
         self.offset_ = offset_ = 0.5
         self.measured_frequency = measured_frequency = 434e6
-        self.frequency_ = frequency_ = 86.8e6
+        self.frequency_ = frequency_ = 10e3
         self.carrying_frequency = carrying_frequency = 86.8e6
         self.amplitude_ = amplitude_ = 300e-3
 
@@ -197,7 +196,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
             4096, #size
-            firdes.WIN_RECTANGULAR, #wintype
+            firdes.WIN_HAMMING, #wintype
             measured_frequency, #fc
             sample_rate, #bw
             "", #name
@@ -272,7 +271,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, sample_rate,True)
         self._amplitude__tool_bar = Qt.QToolBar(self)
         self._amplitude__tool_bar.addWidget(Qt.QLabel('Amplitude                   ' + ": "))
         self._amplitude__line_edit = Qt.QLineEdit(str(self.amplitude_))
@@ -289,9 +287,8 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_throttle_0, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.zeromq_sub_source_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.zeromq_sub_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.zeromq_sub_source_0, 0), (self.qtgui_time_sink_x_0, 0))
 
 
     def closeEvent(self, event):
@@ -326,7 +323,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
 
     def set_sample_rate(self, sample_rate):
         self.sample_rate = sample_rate
-        self.blocks_throttle_0.set_sample_rate(self.sample_rate)
         self.qtgui_freq_sink_x_0.set_frequency_range(self.measured_frequency, self.sample_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.sample_rate)
 
@@ -370,7 +366,7 @@ def snipfcn_snippet_0(self):
     print("Starting client and GUI")
     import threading
     threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
-    # threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()
+    #threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()
 
 
 def snippets_main_after_init(tb):

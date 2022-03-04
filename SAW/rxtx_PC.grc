@@ -150,7 +150,7 @@ blocks:
     gui_hint: 4,0,1,2
     label: 'Test frequency           '
     type: real
-    value: 86.8e6
+    value: 10e3
   states:
     bus_sink: false
     bus_source: false
@@ -288,7 +288,7 @@ blocks:
     options: '[0,1,2,3,4,5]'
     orient: Qt.QVBoxLayout
     type: int
-    value: '3'
+    value: '2'
     widget: combo_box
   states:
     bus_sink: false
@@ -297,25 +297,6 @@ blocks:
     coordinate: [896, 20.0]
     rotation: 0
     state: enabled
-- name: blocks_throttle_0
-  id: blocks_throttle
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    ignoretag: 'True'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samples_per_second: sample_rate
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 92.0]
-    rotation: 0
-    state: true
 - name: epy_module_client
   id: epy_module
   parameters:
@@ -438,7 +419,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: firdes.WIN_RECTANGULAR
+    wintype: firdes.WIN_HAMMING
     ymax: '-5'
     ymin: '-77'
   states:
@@ -542,7 +523,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [480, 76.0]
+    coordinate: [392, 76.0]
     rotation: 0
     state: true
 - name: snippet_0
@@ -555,7 +536,7 @@ blocks:
 
       threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
 
-      # threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()'
+      #threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()'
     comment: ''
     priority: '0'
     section: main_after_init
@@ -589,9 +570,8 @@ blocks:
     state: true
 
 connections:
-- [blocks_throttle_0, '0', qtgui_time_sink_x_0, '0']
-- [zeromq_sub_source_0, '0', blocks_throttle_0, '0']
 - [zeromq_sub_source_0, '0', qtgui_freq_sink_x_0, '0']
+- [zeromq_sub_source_0, '0', qtgui_time_sink_x_0, '0']
 
 metadata:
   file_format: 1
