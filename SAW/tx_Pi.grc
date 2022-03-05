@@ -36,7 +36,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '0.4'
+    value: '0.3'
   states:
     bus_sink: false
     bus_source: false
@@ -190,7 +190,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 160.0]
+    coordinate: [288, 168.0]
     rotation: 0
     state: true
 - name: epy_module_server
@@ -259,7 +259,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 164.0]
+    coordinate: [584, 172.0]
     rotation: 0
     state: true
 - name: snippet_0

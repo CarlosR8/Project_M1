@@ -44,15 +44,15 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 164.0]
+    coordinate: [8, 516.0]
     rotation: 0
     state: enabled
-- name: btn_new
+- name: btn_start
   id: variable_qtgui_push_button
   parameters:
-    comment: 0,1,1,1
-    gui_hint: 0,1,1,1
-    label: New
+    comment: tab_widget_0@1:1,3,1,1
+    gui_hint: tab_widget_0@1:1,3,1,1
+    label: '"Start"'
     pressed: '1'
     released: '0'
     type: int
@@ -61,43 +61,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [136, 364.0]
+    coordinate: [736, 500.0]
     rotation: 0
-    state: disabled
-- name: btn_open
-  id: variable_qtgui_push_button
-  parameters:
-    comment: 0,2,1,1
-    gui_hint: 0,2,1,1
-    label: Open
-    pressed: '1'
-    released: '0'
-    type: int
-    value: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [280, 364.0]
-    rotation: 0
-    state: disabled
-- name: btn_save
-  id: variable_qtgui_push_button
-  parameters:
-    comment: 0,3,1,1
-    gui_hint: 0,3,1,1
-    label: Save
-    pressed: '1'
-    released: '0'
-    type: int
-    value: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [424, 364.0]
-    rotation: 0
-    state: disabled
+    state: true
 - name: carrying_frequency
   id: variable_qtgui_entry
   parameters:
@@ -110,39 +76,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 260.0]
+    coordinate: [8, 612.0]
     rotation: 0
     state: enabled
-- name: entry_bandwidth
+- name: end_freq
   id: variable_qtgui_entry
   parameters:
-    comment: 3,2,1,2
-    gui_hint: 3,2,1,2
-    label: 'Bandwidth   '
+    comment: tab_widget_0@1:1,3,1,1
+    gui_hint: tab_widget_0@1:1,2,1,1
+    label: End frequency
     type: real
-    value: 48e3
+    value: '0.5'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [160, 492.0]
+    coordinate: [600, 516.0]
     rotation: 0
-    state: disabled
-- name: entry_center_frequency
-  id: variable_qtgui_entry
-  parameters:
-    comment: 3,0,1,2
-    gui_hint: 3,0,1,2
-    label: 'Center frequency '
-    type: real
-    value: 86.6e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 492.0]
-    rotation: 0
-    state: disabled
+    state: enabled
 - name: frequency_
   id: variable_qtgui_entry
   parameters:
@@ -155,46 +106,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 20.0]
+    coordinate: [8, 372.0]
     rotation: 0
     state: enabled
-- name: label_conf
-  id: variable_qtgui_label
-  parameters:
-    comment: 0,0,1,1
-    formatter: None
-    gui_hint: 0,0,1,1
-    label: Configuration
-    type: string
-    value: ''
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 364.0]
-    rotation: 0
-    state: disabled
-- name: measured_frequency
-  id: variable_qtgui_range
-  parameters:
-    comment: 2,0,1,4
-    gui_hint: 2,0,1,4
-    label: ''
-    min_len: '200'
-    orient: Qt.Horizontal
-    rangeType: float
-    start: 80e6
-    step: 8.68e6
-    stop: 440e6
-    value: 86.8e6
-    widget: slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [576, 364.0]
-    rotation: 0
-    state: disabled
 - name: measured_frequency
   id: variable_qtgui_entry
   parameters:
@@ -207,7 +121,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 356.0]
+    coordinate: [8, 708.0]
     rotation: 0
     state: enabled
 - name: offset_
@@ -222,9 +136,21 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [904, 164.0]
+    coordinate: [160, 516.0]
     rotation: 0
     state: enabled
+- name: record
+  id: variable
+  parameters:
+    comment: ''
+    value: '"False"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 244.0]
+    rotation: 0
+    state: true
 - name: sample_rate
   id: variable
   parameters:
@@ -249,7 +175,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 260.0]
+    coordinate: [168, 612.0]
     rotation: 0
     state: enabled
 - name: sample_rate_osmosdr
@@ -264,7 +190,49 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 356.0]
+    coordinate: [176, 708.0]
+    rotation: 0
+    state: enabled
+- name: span_freq
+  id: variable_qtgui_entry
+  parameters:
+    comment: tab_widget_0@1:1,2,1,1
+    gui_hint: tab_widget_0@1:1,1,1,1
+    label: Span
+    type: real
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 516.0]
+    rotation: 0
+    state: enabled
+- name: start_freq
+  id: variable_qtgui_entry
+  parameters:
+    comment: tab_widget_0@1:1,0,1,1
+    gui_hint: tab_widget_0@1:1,0,1,1
+    label: Start frequency
+    type: real
+    value: 300e-3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 516.0]
+    rotation: 0
+    state: enabled
+- name: vector_data
+  id: variable
+  parameters:
+    comment: ''
+    value: range(512)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 12.0]
     rotation: 0
     state: enabled
 - name: waveform_
@@ -294,7 +262,27 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [896, 20.0]
+    coordinate: [160, 372.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: vector_data
+    vlen: '512'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 260.0]
     rotation: 0
     state: enabled
 - name: epy_module_client
@@ -349,6 +337,36 @@ blocks:
     coordinate: [8, 260.0]
     rotation: 0
     state: enabled
+- name: epy_module_sweep
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: ''
+    source_code: "# this module will be imported in the into your flowgraph\n\nimport\
+      \ numpy as np\nimport zmq\nimport array\nfrom PyQt5 import Qt\n\ndef sweep(tt):\n\
+      \    while True:\n        # Check if \"start\" has been pressed\n        if((tt.get_btn_start()==1)\
+      \ & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == \"Start\")):\n\
+      \            tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText(\"Stop\"\
+      )\n            tt.set_btn_start(0)\n        elif((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text()\
+      \ == \"Stop\")):\n            tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText(\"\
+      Start\")\n            tt.set_btn_start(0)\n        # Retrieve start, span and\
+      \ end frequency\n        # start_freq=tt.get_start_freq()\n        # span_freq=tt.get_span_freq()\n\
+      \        # stop_freq=tt.get_end_freq()\n        # pass\n        # Nt=10\n  \
+      \      # context=zmq.Context()\n        # sock1=context.socket(zmq.SUB)\n  \
+      \      # sock1.connect(\"tcp://192.168.137.8:5555\");\n        # sock1.setsockopt(zmq.SUBSCRIBE,b\"\
+      \")\n        # vector1=[]\n        # print(\"start\")\n        # while(len(vector1)<Nt):\n\
+      \        #     raw_recv=sock1.recv()\n        #     recv=array.array('f',raw_recv)\
+      \ #float\n        #     # recv=array.array('l',raw_recv) #integer\n        #\
+      \     # print(recv)\n        #     vector1.append(recv)\n\n        # print(\"\
+      finish\")\n        # # print(recv)\n        # f = open(\"data.txt\", \"w\")\n\
+      \        # f.write(str(recv))\n        # f.close()"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 308.0]
+    rotation: 0
+    state: true
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -378,13 +396,13 @@ blocks:
     color7: '"yellow"'
     color8: '"dark red"'
     color9: '"dark green"'
-    comment: ''
+    comment: tab_widget_0@0:1,0,1,4
     ctrlpanel: 'False'
     fc: measured_frequency
     fftsize: '4096'
     freqhalf: 'True'
     grid: 'True'
-    gui_hint: 1,0,1,4
+    gui_hint: tab_widget_0@0:1,0,1,4
     label: Relative Gain
     label1: ''
     label10: ''''''
@@ -426,7 +444,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 156.0]
+    coordinate: [504, 148.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -523,9 +541,82 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 76.0]
+    coordinate: [504, 60.0]
     rotation: 0
     state: true
+- name: qtgui_vector_sink_f_0
+  id: qtgui_vector_sink_f
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    average: '1.0'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: tab_widget_0@1
+    grid: 'False'
+    gui_hint: tab_widget_0@1:0,0,1,4
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    ref_level: '0'
+    showports: 'False'
+    update_time: '0.10'
+    vlen: '512'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    x_axis_label: '"Frequency (Hz)"'
+    x_start: '0'
+    x_step: '1.0'
+    x_units: '"Hz"'
+    y_axis_label: '"Relative Gain (dB)"'
+    y_units: '"dB"'
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 244.0]
+    rotation: 0
+    state: enabled
 - name: snippet_0
   id: snippet
   parameters:
@@ -536,7 +627,7 @@ blocks:
 
       threading.Thread(target=epy_module_client.client, daemon=True, args=(self,)).start()
 
-      #threading.Thread(target=epy_module_GUI.gui, daemon=True, args=(self,)).start()'
+      threading.Thread(target=epy_module_sweep.sweep, daemon=True, args=(self,)).start()'
     comment: ''
     priority: '0'
     section: main_after_init
@@ -545,6 +636,40 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [8, 196.0]
+    rotation: 0
+    state: true
+- name: tab_widget_0
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 1,0,1,4
+    label0: Noise source
+    label1: Frequency sweep
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Tab 2
+    label3: Tab 3
+    label4: Tab 4
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 372.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
@@ -570,6 +695,7 @@ blocks:
     state: true
 
 connections:
+- [blocks_vector_source_x_0, '0', qtgui_vector_sink_f_0, '0']
 - [zeromq_sub_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [zeromq_sub_source_0, '0', qtgui_time_sink_x_0, '0']
 

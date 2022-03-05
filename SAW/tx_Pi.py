@@ -37,7 +37,7 @@ class tx_Pi(gr.top_block):
         self.measured_frequency = measured_frequency = 434e6
         self.frequency_ = frequency_ = 10000
         self.carrying_frequency = carrying_frequency = 86.8e6
-        self.amplitude_ = amplitude_ = 0.4
+        self.amplitude_ = amplitude_ = 0.3
 
         ##################################################
         # Blocks
