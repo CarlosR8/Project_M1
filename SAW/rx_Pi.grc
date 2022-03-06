@@ -32,7 +32,7 @@ options:
     state: enabled
 
 blocks:
-- name: measured_frequency
+- name: entry_var_measured_frequency
   id: variable
   parameters:
     comment: ''
@@ -41,10 +41,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 12.0]
+    coordinate: [408, 12.0]
     rotation: 0
     state: true
-- name: sample_rate_osmosdr
+- name: entry_var_sample_rate_osmosdr
   id: variable
   parameters:
     comment: ''
@@ -84,9 +84,10 @@ blocks:
       \ var_value)\n\t\t\t\t\texec(command) \n\t\t\t\t\tprint(\"The new value of the\
       \ shared variable {} is: {}\".format(var_name, var_value))\n\t\t\t# Once read,\
       \ remove it\t\n\t\t\tos.remove(\"shared_variables.json\")\t\n\t\t\n# \n\ndef\
-      \ main(tt):\n\t# Create list of shared variables\n\tshared_variables = [\"sample_rate_osmosdr\"\
-      ,\"measured_frequency\"]\n\tsFile = Shared_Variable(shared_variables)\n\twhile\
-      \ True:\n\t\ttry:\n\t\t\tsFile.retrieve_variables(tt)\n\t\texcept:\n\t\t\tpass"
+      \ main(tt):\n\t# Create list of shared variables\n\tshared_variables = [\"entry_var_sample_rate_osmosdr\"\
+      ,\"entry_var_measured_frequency\"]\n\tsFile = Shared_Variable(shared_variables)\n\
+      \twhile True:\n\t\ttry:\n\t\t\tsFile.retrieve_variables(tt)\n\t\texcept:\n\t\
+      \t\tpass"
   states:
     bus_sink: false
     bus_source: false
@@ -269,7 +270,7 @@ blocks:
     dc_offset_mode7: '0'
     dc_offset_mode8: '0'
     dc_offset_mode9: '0'
-    freq0: measured_frequency
+    freq0: entry_var_measured_frequency
     freq1: 100e6
     freq10: 100e6
     freq11: 100e6
@@ -433,7 +434,7 @@ blocks:
     minoutbuf: '0'
     nchan: '1'
     num_mboards: '1'
-    sample_rate: sample_rate_osmosdr
+    sample_rate: entry_var_sample_rate_osmosdr
     sync: sync
     time_source0: ''
     time_source1: ''
@@ -486,7 +487,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [336, 188.0]
+    coordinate: [352, 188.0]
     rotation: 0
     state: true
 

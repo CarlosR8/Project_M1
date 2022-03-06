@@ -30,21 +30,21 @@ class tx_Pi(gr.top_block):
         ##################################################
         # Variables
         ##################################################
-        self.waveform_ = waveform_ = 101
-        self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
-        self.sample_rate_gr = sample_rate_gr = 200e3
-        self.offset_ = offset_ = 0.5
-        self.measured_frequency = measured_frequency = 434e6
-        self.frequency_ = frequency_ = 10000
-        self.carrying_frequency = carrying_frequency = 86.8e6
-        self.amplitude_ = amplitude_ = 0.3
+        self.var_waveform_ = var_waveform_ = 101
+        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr = 1.152e6
+        self.entry_var_sample_rate_gr = entry_var_sample_rate_gr = 200e3
+        self.entry_var_offset_ = entry_var_offset_ = 0.5
+        self.entry_var_measured_frequency = entry_var_measured_frequency = 434e6
+        self.entry_var_frequency_ = entry_var_frequency_ = 10000
+        self.entry_var_carrying_frequency = entry_var_carrying_frequency = 86.8e6
+        self.entry_var_amplitude_ = entry_var_amplitude_ = 0.3
 
         ##################################################
         # Blocks
         ##################################################
-        self.rpitx_rpitx_sink_0 = rpitx.rpitx_sink(sample_rate_gr, carrying_frequency)
+        self.rpitx_rpitx_sink_0 = rpitx.rpitx_sink(entry_var_sample_rate_gr, entry_var_carrying_frequency)
         self.blocks_magphase_to_complex_0 = blocks.magphase_to_complex(1)
-        self.analog_sig_source_x_0 = analog.sig_source_f(sample_rate_gr, waveform_, frequency_, amplitude_, offset_, 0)
+        self.analog_sig_source_x_0 = analog.sig_source_f(entry_var_sample_rate_gr, var_waveform_, entry_var_frequency_, entry_var_amplitude_, entry_var_offset_, 0)
         self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 0)
 
 
@@ -56,59 +56,59 @@ class tx_Pi(gr.top_block):
         self.connect((self.blocks_magphase_to_complex_0, 0), (self.rpitx_rpitx_sink_0, 0))
 
 
-    def get_waveform_(self):
-        return self.waveform_
+    def get_var_waveform_(self):
+        return self.var_waveform_
 
-    def set_waveform_(self, waveform_):
-        self.waveform_ = waveform_
-        self.analog_sig_source_x_0.set_waveform(self.waveform_)
+    def set_var_waveform_(self, var_waveform_):
+        self.var_waveform_ = var_waveform_
+        self.analog_sig_source_x_0.set_waveform(self.var_waveform_)
 
-    def get_sample_rate_osmosdr(self):
-        return self.sample_rate_osmosdr
+    def get_entry_var_sample_rate_osmosdr(self):
+        return self.entry_var_sample_rate_osmosdr
 
-    def set_sample_rate_osmosdr(self, sample_rate_osmosdr):
-        self.sample_rate_osmosdr = sample_rate_osmosdr
+    def set_entry_var_sample_rate_osmosdr(self, entry_var_sample_rate_osmosdr):
+        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr
 
-    def get_sample_rate_gr(self):
-        return self.sample_rate_gr
+    def get_entry_var_sample_rate_gr(self):
+        return self.entry_var_sample_rate_gr
 
-    def set_sample_rate_gr(self, sample_rate_gr):
-        self.sample_rate_gr = sample_rate_gr
-        self.analog_sig_source_x_0.set_sampling_freq(self.sample_rate_gr)
+    def set_entry_var_sample_rate_gr(self, entry_var_sample_rate_gr):
+        self.entry_var_sample_rate_gr = entry_var_sample_rate_gr
+        self.analog_sig_source_x_0.set_sampling_freq(self.entry_var_sample_rate_gr)
 
-    def get_offset_(self):
-        return self.offset_
+    def get_entry_var_offset_(self):
+        return self.entry_var_offset_
 
-    def set_offset_(self, offset_):
-        self.offset_ = offset_
-        self.analog_sig_source_x_0.set_offset(self.offset_)
+    def set_entry_var_offset_(self, entry_var_offset_):
+        self.entry_var_offset_ = entry_var_offset_
+        self.analog_sig_source_x_0.set_offset(self.entry_var_offset_)
 
-    def get_measured_frequency(self):
-        return self.measured_frequency
+    def get_entry_var_measured_frequency(self):
+        return self.entry_var_measured_frequency
 
-    def set_measured_frequency(self, measured_frequency):
-        self.measured_frequency = measured_frequency
+    def set_entry_var_measured_frequency(self, entry_var_measured_frequency):
+        self.entry_var_measured_frequency = entry_var_measured_frequency
 
-    def get_frequency_(self):
-        return self.frequency_
+    def get_entry_var_frequency_(self):
+        return self.entry_var_frequency_
 
-    def set_frequency_(self, frequency_):
-        self.frequency_ = frequency_
-        self.analog_sig_source_x_0.set_frequency(self.frequency_)
+    def set_entry_var_frequency_(self, entry_var_frequency_):
+        self.entry_var_frequency_ = entry_var_frequency_
+        self.analog_sig_source_x_0.set_frequency(self.entry_var_frequency_)
 
-    def get_carrying_frequency(self):
-        return self.carrying_frequency
+    def get_entry_var_carrying_frequency(self):
+        return self.entry_var_carrying_frequency
 
-    def set_carrying_frequency(self, carrying_frequency):
-        self.carrying_frequency = carrying_frequency
-        self.rpitx_rpitx_sink_0.set_freq(self.carrying_frequency)
+    def set_entry_var_carrying_frequency(self, entry_var_carrying_frequency):
+        self.entry_var_carrying_frequency = entry_var_carrying_frequency
+        self.rpitx_rpitx_sink_0.set_freq(self.entry_var_carrying_frequency)
 
-    def get_amplitude_(self):
-        return self.amplitude_
+    def get_entry_var_amplitude_(self):
+        return self.entry_var_amplitude_
 
-    def set_amplitude_(self, amplitude_):
-        self.amplitude_ = amplitude_
-        self.analog_sig_source_x_0.set_amplitude(self.amplitude_)
+    def set_entry_var_amplitude_(self, entry_var_amplitude_):
+        self.entry_var_amplitude_ = entry_var_amplitude_
+        self.analog_sig_source_x_0.set_amplitude(self.entry_var_amplitude_)
 
 def snipfcn_snippet_0(self):
     print("Starting server")

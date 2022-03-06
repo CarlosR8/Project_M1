@@ -75,21 +75,22 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
-        self.waveform_ = waveform_ = 2
+        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr = 1.152e6
         self.vector_data = vector_data = range(512)
-        self.start_freq = start_freq = 300e-3
-        self.span_freq = span_freq = 0.5
-        self.sample_rate_gr = sample_rate_gr = 200e3
-        self.sample_rate = sample_rate = sample_rate_osmosdr
-        self.record = record = "False"
-        self.offset_ = offset_ = 0.5
-        self.measured_frequency = measured_frequency = 434e6
-        self.frequency_ = frequency_ = 10e3
-        self.end_freq = end_freq = 0.5
-        self.carrying_frequency = carrying_frequency = 86.8e6
+        self.var_waveform_ = var_waveform_ = 2
+        self.var_record = var_record = "False"
+        self.sweeping = sweeping = "False"
+        self.sample_rate = sample_rate = entry_var_sample_rate_osmosdr
+        self.entry_var_sample_rate_gr = entry_var_sample_rate_gr = 200e3
+        self.entry_var_offset_ = entry_var_offset_ = 0.5
+        self.entry_var_measured_frequency = entry_var_measured_frequency = 434e6
+        self.entry_var_frequency_ = entry_var_frequency_ = 10e3
+        self.entry_var_carrying_frequency = entry_var_carrying_frequency = 86.8e6
+        self.entry_var_amplitude_ = entry_var_amplitude_ = 300e-3
+        self.entry_start_freq = entry_start_freq = 300e-3
+        self.entry_span_freq = entry_span_freq = 0.5
+        self.entry_end_freq = entry_end_freq = 0.5
         self.btn_start = btn_start = 0
-        self.amplitude_ = amplitude_ = 300e-3
 
         ##################################################
         # Blocks
@@ -110,79 +111,35 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._measured_frequency_tool_bar = Qt.QToolBar(self)
-        self._measured_frequency_tool_bar.addWidget(Qt.QLabel('Measured Frequency  ' + ": "))
-        self._measured_frequency_line_edit = Qt.QLineEdit(str(self.measured_frequency))
-        self._measured_frequency_tool_bar.addWidget(self._measured_frequency_line_edit)
-        self._measured_frequency_line_edit.returnPressed.connect(
-            lambda: self.set_measured_frequency(eng_notation.str_to_num(str(self._measured_frequency_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._measured_frequency_tool_bar, 7, 0, 1, 2)
+        self._entry_var_measured_frequency_tool_bar = Qt.QToolBar(self)
+        self._entry_var_measured_frequency_tool_bar.addWidget(Qt.QLabel('Measured Frequency  ' + ": "))
+        self._entry_var_measured_frequency_line_edit = Qt.QLineEdit(str(self.entry_var_measured_frequency))
+        self._entry_var_measured_frequency_tool_bar.addWidget(self._entry_var_measured_frequency_line_edit)
+        self._entry_var_measured_frequency_line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_measured_frequency(eng_notation.str_to_num(str(self._entry_var_measured_frequency_line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_measured_frequency_tool_bar, 7, 0, 1, 2)
         for r in range(7, 8):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://192.168.137.8:5555', 100, False, -1)
         # Create the options list
-        self._waveform__options = [0, 1, 2, 3, 4, 5]
+        self._var_waveform__options = [0, 1, 2, 3, 4, 5]
         # Create the labels list
-        self._waveform__labels = ['Constant', 'Sine', 'Cosine', 'Square', 'Triangle', 'Saw Tooth']
+        self._var_waveform__labels = ['Constant', 'Sine', 'Cosine', 'Square', 'Triangle', 'Saw Tooth']
         # Create the combo box
-        self._waveform__tool_bar = Qt.QToolBar(self)
-        self._waveform__tool_bar.addWidget(Qt.QLabel('Waveform                  ' + ": "))
-        self._waveform__combo_box = Qt.QComboBox()
-        self._waveform__tool_bar.addWidget(self._waveform__combo_box)
-        for _label in self._waveform__labels: self._waveform__combo_box.addItem(_label)
-        self._waveform__callback = lambda i: Qt.QMetaObject.invokeMethod(self._waveform__combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._waveform__options.index(i)))
-        self._waveform__callback(self.waveform_)
-        self._waveform__combo_box.currentIndexChanged.connect(
-            lambda i: self.set_waveform_(self._waveform__options[i]))
+        self._var_waveform__tool_bar = Qt.QToolBar(self)
+        self._var_waveform__tool_bar.addWidget(Qt.QLabel('Waveform                  ' + ": "))
+        self._var_waveform__combo_box = Qt.QComboBox()
+        self._var_waveform__tool_bar.addWidget(self._var_waveform__combo_box)
+        for _label in self._var_waveform__labels: self._var_waveform__combo_box.addItem(_label)
+        self._var_waveform__callback = lambda i: Qt.QMetaObject.invokeMethod(self._var_waveform__combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._var_waveform__options.index(i)))
+        self._var_waveform__callback(self.var_waveform_)
+        self._var_waveform__combo_box.currentIndexChanged.connect(
+            lambda i: self.set_var_waveform_(self._var_waveform__options[i]))
         # Create the radio buttons
-        self.top_grid_layout.addWidget(self._waveform__tool_bar, 4, 2, 1, 2)
+        self.top_grid_layout.addWidget(self._var_waveform__tool_bar, 4, 2, 1, 2)
         for r in range(4, 5):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(2, 4):
-            self.top_grid_layout.setColumnStretch(c, 1)
-        self._start_freq_tool_bar = Qt.QToolBar(self)
-        self._start_freq_tool_bar.addWidget(Qt.QLabel('Start frequency' + ": "))
-        self._start_freq_line_edit = Qt.QLineEdit(str(self.start_freq))
-        self._start_freq_tool_bar.addWidget(self._start_freq_line_edit)
-        self._start_freq_line_edit.returnPressed.connect(
-            lambda: self.set_start_freq(eng_notation.str_to_num(str(self._start_freq_line_edit.text()))))
-        self.tab_widget_0_grid_layout_1.addWidget(self._start_freq_tool_bar, 1, 0, 1, 1)
-        for r in range(1, 2):
-            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
-        for c in range(0, 1):
-            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
-        self._span_freq_tool_bar = Qt.QToolBar(self)
-        self._span_freq_tool_bar.addWidget(Qt.QLabel('Span' + ": "))
-        self._span_freq_line_edit = Qt.QLineEdit(str(self.span_freq))
-        self._span_freq_tool_bar.addWidget(self._span_freq_line_edit)
-        self._span_freq_line_edit.returnPressed.connect(
-            lambda: self.set_span_freq(eng_notation.str_to_num(str(self._span_freq_line_edit.text()))))
-        self.tab_widget_0_grid_layout_1.addWidget(self._span_freq_tool_bar, 1, 1, 1, 1)
-        for r in range(1, 2):
-            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
-        for c in range(1, 2):
-            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
-        self._sample_rate_osmosdr_tool_bar = Qt.QToolBar(self)
-        self._sample_rate_osmosdr_tool_bar.addWidget(Qt.QLabel('Sample rate Osmosdr' + ": "))
-        self._sample_rate_osmosdr_line_edit = Qt.QLineEdit(str(self.sample_rate_osmosdr))
-        self._sample_rate_osmosdr_tool_bar.addWidget(self._sample_rate_osmosdr_line_edit)
-        self._sample_rate_osmosdr_line_edit.returnPressed.connect(
-            lambda: self.set_sample_rate_osmosdr(eng_notation.str_to_num(str(self._sample_rate_osmosdr_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._sample_rate_osmosdr_tool_bar, 7, 2, 1, 2)
-        for r in range(7, 8):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(2, 4):
-            self.top_grid_layout.setColumnStretch(c, 1)
-        self._sample_rate_gr_tool_bar = Qt.QToolBar(self)
-        self._sample_rate_gr_tool_bar.addWidget(Qt.QLabel('Sample rate gr-rpitx  ' + ": "))
-        self._sample_rate_gr_line_edit = Qt.QLineEdit(str(self.sample_rate_gr))
-        self._sample_rate_gr_tool_bar.addWidget(self._sample_rate_gr_line_edit)
-        self._sample_rate_gr_line_edit.returnPressed.connect(
-            lambda: self.set_sample_rate_gr(eng_notation.str_to_num(str(self._sample_rate_gr_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._sample_rate_gr_tool_bar, 6, 2, 1, 2)
-        for r in range(6, 7):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
@@ -284,7 +241,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
             4096, #size
             firdes.WIN_HAMMING, #wintype
-            measured_frequency, #fc
+            entry_var_measured_frequency, #fc
             sample_rate, #bw
             "", #name
             1
@@ -325,50 +282,105 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.tab_widget_0_grid_layout_0.setRowStretch(r, 1)
         for c in range(0, 4):
             self.tab_widget_0_grid_layout_0.setColumnStretch(c, 1)
-        self._offset__tool_bar = Qt.QToolBar(self)
-        self._offset__tool_bar.addWidget(Qt.QLabel('Offset                        ' + ": "))
-        self._offset__line_edit = Qt.QLineEdit(str(self.offset_))
-        self._offset__tool_bar.addWidget(self._offset__line_edit)
-        self._offset__line_edit.returnPressed.connect(
-            lambda: self.set_offset_(eng_notation.str_to_num(str(self._offset__line_edit.text()))))
-        self.top_grid_layout.addWidget(self._offset__tool_bar, 5, 2, 1, 2)
+        self._entry_var_sample_rate_osmosdr_tool_bar = Qt.QToolBar(self)
+        self._entry_var_sample_rate_osmosdr_tool_bar.addWidget(Qt.QLabel('Sample rate Osmosdr' + ": "))
+        self._entry_var_sample_rate_osmosdr_line_edit = Qt.QLineEdit(str(self.entry_var_sample_rate_osmosdr))
+        self._entry_var_sample_rate_osmosdr_tool_bar.addWidget(self._entry_var_sample_rate_osmosdr_line_edit)
+        self._entry_var_sample_rate_osmosdr_line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_sample_rate_osmosdr(eng_notation.str_to_num(str(self._entry_var_sample_rate_osmosdr_line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_sample_rate_osmosdr_tool_bar, 7, 2, 1, 2)
+        for r in range(7, 8):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(2, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._entry_var_sample_rate_gr_tool_bar = Qt.QToolBar(self)
+        self._entry_var_sample_rate_gr_tool_bar.addWidget(Qt.QLabel('Sample rate gr-rpitx  ' + ": "))
+        self._entry_var_sample_rate_gr_line_edit = Qt.QLineEdit(str(self.entry_var_sample_rate_gr))
+        self._entry_var_sample_rate_gr_tool_bar.addWidget(self._entry_var_sample_rate_gr_line_edit)
+        self._entry_var_sample_rate_gr_line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_sample_rate_gr(eng_notation.str_to_num(str(self._entry_var_sample_rate_gr_line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_sample_rate_gr_tool_bar, 6, 2, 1, 2)
+        for r in range(6, 7):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(2, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._entry_var_offset__tool_bar = Qt.QToolBar(self)
+        self._entry_var_offset__tool_bar.addWidget(Qt.QLabel('Offset                        ' + ": "))
+        self._entry_var_offset__line_edit = Qt.QLineEdit(str(self.entry_var_offset_))
+        self._entry_var_offset__tool_bar.addWidget(self._entry_var_offset__line_edit)
+        self._entry_var_offset__line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_offset_(eng_notation.str_to_num(str(self._entry_var_offset__line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_offset__tool_bar, 5, 2, 1, 2)
         for r in range(5, 6):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._frequency__tool_bar = Qt.QToolBar(self)
-        self._frequency__tool_bar.addWidget(Qt.QLabel('Test frequency           ' + ": "))
-        self._frequency__line_edit = Qt.QLineEdit(str(self.frequency_))
-        self._frequency__tool_bar.addWidget(self._frequency__line_edit)
-        self._frequency__line_edit.returnPressed.connect(
-            lambda: self.set_frequency_(eng_notation.str_to_num(str(self._frequency__line_edit.text()))))
-        self.top_grid_layout.addWidget(self._frequency__tool_bar, 4, 0, 1, 2)
+        self._entry_var_frequency__tool_bar = Qt.QToolBar(self)
+        self._entry_var_frequency__tool_bar.addWidget(Qt.QLabel('Test frequency           ' + ": "))
+        self._entry_var_frequency__line_edit = Qt.QLineEdit(str(self.entry_var_frequency_))
+        self._entry_var_frequency__tool_bar.addWidget(self._entry_var_frequency__line_edit)
+        self._entry_var_frequency__line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_frequency_(eng_notation.str_to_num(str(self._entry_var_frequency__line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_frequency__tool_bar, 4, 0, 1, 2)
         for r in range(4, 5):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._end_freq_tool_bar = Qt.QToolBar(self)
-        self._end_freq_tool_bar.addWidget(Qt.QLabel('End frequency' + ": "))
-        self._end_freq_line_edit = Qt.QLineEdit(str(self.end_freq))
-        self._end_freq_tool_bar.addWidget(self._end_freq_line_edit)
-        self._end_freq_line_edit.returnPressed.connect(
-            lambda: self.set_end_freq(eng_notation.str_to_num(str(self._end_freq_line_edit.text()))))
-        self.tab_widget_0_grid_layout_1.addWidget(self._end_freq_tool_bar, 1, 2, 1, 1)
-        for r in range(1, 2):
-            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
-        for c in range(2, 3):
-            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
-        self._carrying_frequency_tool_bar = Qt.QToolBar(self)
-        self._carrying_frequency_tool_bar.addWidget(Qt.QLabel('Carrying frequency     ' + ": "))
-        self._carrying_frequency_line_edit = Qt.QLineEdit(str(self.carrying_frequency))
-        self._carrying_frequency_tool_bar.addWidget(self._carrying_frequency_line_edit)
-        self._carrying_frequency_line_edit.returnPressed.connect(
-            lambda: self.set_carrying_frequency(eng_notation.str_to_num(str(self._carrying_frequency_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._carrying_frequency_tool_bar, 6, 0, 1, 2)
+        self._entry_var_carrying_frequency_tool_bar = Qt.QToolBar(self)
+        self._entry_var_carrying_frequency_tool_bar.addWidget(Qt.QLabel('Carrying frequency     ' + ": "))
+        self._entry_var_carrying_frequency_line_edit = Qt.QLineEdit(str(self.entry_var_carrying_frequency))
+        self._entry_var_carrying_frequency_tool_bar.addWidget(self._entry_var_carrying_frequency_line_edit)
+        self._entry_var_carrying_frequency_line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_carrying_frequency(eng_notation.str_to_num(str(self._entry_var_carrying_frequency_line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_carrying_frequency_tool_bar, 6, 0, 1, 2)
         for r in range(6, 7):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._entry_var_amplitude__tool_bar = Qt.QToolBar(self)
+        self._entry_var_amplitude__tool_bar.addWidget(Qt.QLabel('Amplitude                   ' + ": "))
+        self._entry_var_amplitude__line_edit = Qt.QLineEdit(str(self.entry_var_amplitude_))
+        self._entry_var_amplitude__tool_bar.addWidget(self._entry_var_amplitude__line_edit)
+        self._entry_var_amplitude__line_edit.returnPressed.connect(
+            lambda: self.set_entry_var_amplitude_(eng_notation.str_to_num(str(self._entry_var_amplitude__line_edit.text()))))
+        self.top_grid_layout.addWidget(self._entry_var_amplitude__tool_bar, 5, 0, 1, 2)
+        for r in range(5, 6):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 2):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._entry_start_freq_tool_bar = Qt.QToolBar(self)
+        self._entry_start_freq_tool_bar.addWidget(Qt.QLabel('Start frequency' + ": "))
+        self._entry_start_freq_line_edit = Qt.QLineEdit(str(self.entry_start_freq))
+        self._entry_start_freq_tool_bar.addWidget(self._entry_start_freq_line_edit)
+        self._entry_start_freq_line_edit.returnPressed.connect(
+            lambda: self.set_entry_start_freq(eng_notation.str_to_num(str(self._entry_start_freq_line_edit.text()))))
+        self.tab_widget_0_grid_layout_1.addWidget(self._entry_start_freq_tool_bar, 1, 0, 1, 1)
+        for r in range(1, 2):
+            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
+        self._entry_span_freq_tool_bar = Qt.QToolBar(self)
+        self._entry_span_freq_tool_bar.addWidget(Qt.QLabel('Span' + ": "))
+        self._entry_span_freq_line_edit = Qt.QLineEdit(str(self.entry_span_freq))
+        self._entry_span_freq_tool_bar.addWidget(self._entry_span_freq_line_edit)
+        self._entry_span_freq_line_edit.returnPressed.connect(
+            lambda: self.set_entry_span_freq(eng_notation.str_to_num(str(self._entry_span_freq_line_edit.text()))))
+        self.tab_widget_0_grid_layout_1.addWidget(self._entry_span_freq_tool_bar, 1, 1, 1, 1)
+        for r in range(1, 2):
+            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
+        for c in range(1, 2):
+            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
+        self._entry_end_freq_tool_bar = Qt.QToolBar(self)
+        self._entry_end_freq_tool_bar.addWidget(Qt.QLabel('End frequency' + ": "))
+        self._entry_end_freq_line_edit = Qt.QLineEdit(str(self.entry_end_freq))
+        self._entry_end_freq_tool_bar.addWidget(self._entry_end_freq_line_edit)
+        self._entry_end_freq_line_edit.returnPressed.connect(
+            lambda: self.set_entry_end_freq(eng_notation.str_to_num(str(self._entry_end_freq_line_edit.text()))))
+        self.tab_widget_0_grid_layout_1.addWidget(self._entry_end_freq_tool_bar, 1, 2, 1, 1)
+        for r in range(1, 2):
+            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
+        for c in range(2, 3):
+            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
         _btn_start_push_button = Qt.QPushButton("Start")
         _btn_start_push_button = Qt.QPushButton("Start")
         self._btn_start_choices = {'Pressed': 1, 'Released': 0}
@@ -380,17 +392,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         for c in range(3, 4):
             self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
         self.blocks_vector_source_x_0 = blocks.vector_source_f(vector_data, True, 512, [])
-        self._amplitude__tool_bar = Qt.QToolBar(self)
-        self._amplitude__tool_bar.addWidget(Qt.QLabel('Amplitude                   ' + ": "))
-        self._amplitude__line_edit = Qt.QLineEdit(str(self.amplitude_))
-        self._amplitude__tool_bar.addWidget(self._amplitude__line_edit)
-        self._amplitude__line_edit.returnPressed.connect(
-            lambda: self.set_amplitude_(eng_notation.str_to_num(str(self._amplitude__line_edit.text()))))
-        self.top_grid_layout.addWidget(self._amplitude__tool_bar, 5, 0, 1, 2)
-        for r in range(5, 6):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(0, 2):
-            self.top_grid_layout.setColumnStretch(c, 1)
 
 
         ##################################################
@@ -406,20 +407,13 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
-    def get_sample_rate_osmosdr(self):
-        return self.sample_rate_osmosdr
+    def get_entry_var_sample_rate_osmosdr(self):
+        return self.entry_var_sample_rate_osmosdr
 
-    def set_sample_rate_osmosdr(self, sample_rate_osmosdr):
-        self.sample_rate_osmosdr = sample_rate_osmosdr
-        self.set_sample_rate(self.sample_rate_osmosdr)
-        Qt.QMetaObject.invokeMethod(self._sample_rate_osmosdr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.sample_rate_osmosdr)))
-
-    def get_waveform_(self):
-        return self.waveform_
-
-    def set_waveform_(self, waveform_):
-        self.waveform_ = waveform_
-        self._waveform__callback(self.waveform_)
+    def set_entry_var_sample_rate_osmosdr(self, entry_var_sample_rate_osmosdr):
+        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr
+        Qt.QMetaObject.invokeMethod(self._entry_var_sample_rate_osmosdr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_sample_rate_osmosdr)))
+        self.set_sample_rate(self.entry_var_sample_rate_osmosdr)
 
     def get_vector_data(self):
         return self.vector_data
@@ -428,89 +422,102 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.vector_data = vector_data
         self.blocks_vector_source_x_0.set_data(self.vector_data, [])
 
-    def get_start_freq(self):
-        return self.start_freq
+    def get_var_waveform_(self):
+        return self.var_waveform_
 
-    def set_start_freq(self, start_freq):
-        self.start_freq = start_freq
-        Qt.QMetaObject.invokeMethod(self._start_freq_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.start_freq)))
+    def set_var_waveform_(self, var_waveform_):
+        self.var_waveform_ = var_waveform_
+        self._var_waveform__callback(self.var_waveform_)
 
-    def get_span_freq(self):
-        return self.span_freq
+    def get_var_record(self):
+        return self.var_record
 
-    def set_span_freq(self, span_freq):
-        self.span_freq = span_freq
-        Qt.QMetaObject.invokeMethod(self._span_freq_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.span_freq)))
+    def set_var_record(self, var_record):
+        self.var_record = var_record
 
-    def get_sample_rate_gr(self):
-        return self.sample_rate_gr
+    def get_sweeping(self):
+        return self.sweeping
 
-    def set_sample_rate_gr(self, sample_rate_gr):
-        self.sample_rate_gr = sample_rate_gr
-        Qt.QMetaObject.invokeMethod(self._sample_rate_gr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.sample_rate_gr)))
+    def set_sweeping(self, sweeping):
+        self.sweeping = sweeping
 
     def get_sample_rate(self):
         return self.sample_rate
 
     def set_sample_rate(self, sample_rate):
         self.sample_rate = sample_rate
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.measured_frequency, self.sample_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.entry_var_measured_frequency, self.sample_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.sample_rate)
 
-    def get_record(self):
-        return self.record
+    def get_entry_var_sample_rate_gr(self):
+        return self.entry_var_sample_rate_gr
 
-    def set_record(self, record):
-        self.record = record
+    def set_entry_var_sample_rate_gr(self, entry_var_sample_rate_gr):
+        self.entry_var_sample_rate_gr = entry_var_sample_rate_gr
+        Qt.QMetaObject.invokeMethod(self._entry_var_sample_rate_gr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_sample_rate_gr)))
 
-    def get_offset_(self):
-        return self.offset_
+    def get_entry_var_offset_(self):
+        return self.entry_var_offset_
 
-    def set_offset_(self, offset_):
-        self.offset_ = offset_
-        Qt.QMetaObject.invokeMethod(self._offset__line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.offset_)))
+    def set_entry_var_offset_(self, entry_var_offset_):
+        self.entry_var_offset_ = entry_var_offset_
+        Qt.QMetaObject.invokeMethod(self._entry_var_offset__line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_offset_)))
 
-    def get_measured_frequency(self):
-        return self.measured_frequency
+    def get_entry_var_measured_frequency(self):
+        return self.entry_var_measured_frequency
 
-    def set_measured_frequency(self, measured_frequency):
-        self.measured_frequency = measured_frequency
-        Qt.QMetaObject.invokeMethod(self._measured_frequency_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.measured_frequency)))
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.measured_frequency, self.sample_rate)
+    def set_entry_var_measured_frequency(self, entry_var_measured_frequency):
+        self.entry_var_measured_frequency = entry_var_measured_frequency
+        Qt.QMetaObject.invokeMethod(self._entry_var_measured_frequency_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_measured_frequency)))
+        self.qtgui_freq_sink_x_0.set_frequency_range(self.entry_var_measured_frequency, self.sample_rate)
 
-    def get_frequency_(self):
-        return self.frequency_
+    def get_entry_var_frequency_(self):
+        return self.entry_var_frequency_
 
-    def set_frequency_(self, frequency_):
-        self.frequency_ = frequency_
-        Qt.QMetaObject.invokeMethod(self._frequency__line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.frequency_)))
+    def set_entry_var_frequency_(self, entry_var_frequency_):
+        self.entry_var_frequency_ = entry_var_frequency_
+        Qt.QMetaObject.invokeMethod(self._entry_var_frequency__line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_frequency_)))
 
-    def get_end_freq(self):
-        return self.end_freq
+    def get_entry_var_carrying_frequency(self):
+        return self.entry_var_carrying_frequency
 
-    def set_end_freq(self, end_freq):
-        self.end_freq = end_freq
-        Qt.QMetaObject.invokeMethod(self._end_freq_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.end_freq)))
+    def set_entry_var_carrying_frequency(self, entry_var_carrying_frequency):
+        self.entry_var_carrying_frequency = entry_var_carrying_frequency
+        Qt.QMetaObject.invokeMethod(self._entry_var_carrying_frequency_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_carrying_frequency)))
 
-    def get_carrying_frequency(self):
-        return self.carrying_frequency
+    def get_entry_var_amplitude_(self):
+        return self.entry_var_amplitude_
 
-    def set_carrying_frequency(self, carrying_frequency):
-        self.carrying_frequency = carrying_frequency
-        Qt.QMetaObject.invokeMethod(self._carrying_frequency_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.carrying_frequency)))
+    def set_entry_var_amplitude_(self, entry_var_amplitude_):
+        self.entry_var_amplitude_ = entry_var_amplitude_
+        Qt.QMetaObject.invokeMethod(self._entry_var_amplitude__line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_amplitude_)))
+
+    def get_entry_start_freq(self):
+        return self.entry_start_freq
+
+    def set_entry_start_freq(self, entry_start_freq):
+        self.entry_start_freq = entry_start_freq
+        Qt.QMetaObject.invokeMethod(self._entry_start_freq_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_start_freq)))
+
+    def get_entry_span_freq(self):
+        return self.entry_span_freq
+
+    def set_entry_span_freq(self, entry_span_freq):
+        self.entry_span_freq = entry_span_freq
+        Qt.QMetaObject.invokeMethod(self._entry_span_freq_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_span_freq)))
+
+    def get_entry_end_freq(self):
+        return self.entry_end_freq
+
+    def set_entry_end_freq(self, entry_end_freq):
+        self.entry_end_freq = entry_end_freq
+        Qt.QMetaObject.invokeMethod(self._entry_end_freq_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_end_freq)))
 
     def get_btn_start(self):
         return self.btn_start
 
     def set_btn_start(self, btn_start):
         self.btn_start = btn_start
-
-    def get_amplitude_(self):
-        return self.amplitude_
-
-    def set_amplitude_(self, amplitude_):
-        self.amplitude_ = amplitude_
-        Qt.QMetaObject.invokeMethod(self._amplitude__line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.amplitude_)))
 
 def snipfcn_snippet_0(self):
     print("Starting client and GUI")

@@ -32,21 +32,6 @@ options:
     state: enabled
 
 blocks:
-- name: amplitude_
-  id: variable_qtgui_entry
-  parameters:
-    comment: 5,0,1,2
-    gui_hint: 5,0,1,2
-    label: 'Amplitude                   '
-    type: real
-    value: 300e-3
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 516.0]
-    rotation: 0
-    state: enabled
 - name: btn_start
   id: variable_qtgui_push_button
   parameters:
@@ -64,22 +49,7 @@ blocks:
     coordinate: [736, 500.0]
     rotation: 0
     state: true
-- name: carrying_frequency
-  id: variable_qtgui_entry
-  parameters:
-    comment: 6,0,1,2
-    gui_hint: 6,0,1,2
-    label: 'Carrying frequency     '
-    type: real
-    value: 86.8e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 612.0]
-    rotation: 0
-    state: enabled
-- name: end_freq
+- name: entry_end_freq
   id: variable_qtgui_entry
   parameters:
     comment: tab_widget_0@1:1,3,1,1
@@ -94,106 +64,7 @@ blocks:
     coordinate: [600, 516.0]
     rotation: 0
     state: enabled
-- name: frequency_
-  id: variable_qtgui_entry
-  parameters:
-    comment: 4,0,1,2
-    gui_hint: 4,0,1,2
-    label: 'Test frequency           '
-    type: real
-    value: 10e3
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 372.0]
-    rotation: 0
-    state: enabled
-- name: measured_frequency
-  id: variable_qtgui_entry
-  parameters:
-    comment: 7,0,1,2
-    gui_hint: 7,0,1,2
-    label: 'Measured Frequency  '
-    type: real
-    value: 434e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 708.0]
-    rotation: 0
-    state: enabled
-- name: offset_
-  id: variable_qtgui_entry
-  parameters:
-    comment: 5,2,1,2
-    gui_hint: 5,2,1,2
-    label: 'Offset                        '
-    type: real
-    value: '0.5'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [160, 516.0]
-    rotation: 0
-    state: enabled
-- name: record
-  id: variable
-  parameters:
-    comment: ''
-    value: '"False"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [680, 244.0]
-    rotation: 0
-    state: true
-- name: sample_rate
-  id: variable
-  parameters:
-    comment: sample_rate = sample_rate_osmosdr
-    value: sample_rate_osmosdr
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [176, 12.0]
-    rotation: 0
-    state: enabled
-- name: sample_rate_gr
-  id: variable_qtgui_entry
-  parameters:
-    comment: 6,2,1,2
-    gui_hint: 6,2,1,2
-    label: 'Sample rate gr-rpitx  '
-    type: real
-    value: 200e3
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [168, 612.0]
-    rotation: 0
-    state: enabled
-- name: sample_rate_osmosdr
-  id: variable_qtgui_entry
-  parameters:
-    comment: 7,2,1,2
-    gui_hint: 7,2,1,2
-    label: Sample rate Osmosdr
-    type: real
-    value: 1.152e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [176, 708.0]
-    rotation: 0
-    state: enabled
-- name: span_freq
+- name: entry_span_freq
   id: variable_qtgui_entry
   parameters:
     comment: tab_widget_0@1:1,2,1,1
@@ -208,7 +79,7 @@ blocks:
     coordinate: [464, 516.0]
     rotation: 0
     state: enabled
-- name: start_freq
+- name: entry_start_freq
   id: variable_qtgui_entry
   parameters:
     comment: tab_widget_0@1:1,0,1,1
@@ -223,19 +94,148 @@ blocks:
     coordinate: [328, 516.0]
     rotation: 0
     state: enabled
-- name: vector_data
-  id: variable
+- name: entry_var_amplitude_
+  id: variable_qtgui_entry
   parameters:
-    comment: ''
-    value: range(512)
+    comment: 5,0,1,2
+    gui_hint: 5,0,1,2
+    label: 'Amplitude                   '
+    type: real
+    value: 300e-3
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 12.0]
+    coordinate: [8, 516.0]
     rotation: 0
     state: enabled
-- name: waveform_
+- name: entry_var_carrying_frequency
+  id: variable_qtgui_entry
+  parameters:
+    comment: 6,0,1,2
+    gui_hint: 6,0,1,2
+    label: 'Carrying frequency     '
+    type: real
+    value: 86.8e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 612.0]
+    rotation: 0
+    state: enabled
+- name: entry_var_frequency_
+  id: variable_qtgui_entry
+  parameters:
+    comment: 4,0,1,2
+    gui_hint: 4,0,1,2
+    label: 'Test frequency           '
+    type: real
+    value: 10e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 372.0]
+    rotation: 0
+    state: enabled
+- name: entry_var_measured_frequency
+  id: variable_qtgui_entry
+  parameters:
+    comment: 7,0,1,2
+    gui_hint: 7,0,1,2
+    label: 'Measured Frequency  '
+    type: real
+    value: 434e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 708.0]
+    rotation: 0
+    state: enabled
+- name: entry_var_offset_
+  id: variable_qtgui_entry
+  parameters:
+    comment: 5,2,1,2
+    gui_hint: 5,2,1,2
+    label: 'Offset                        '
+    type: real
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 516.0]
+    rotation: 0
+    state: enabled
+- name: entry_var_sample_rate_gr
+  id: variable_qtgui_entry
+  parameters:
+    comment: 6,2,1,2
+    gui_hint: 6,2,1,2
+    label: 'Sample rate gr-rpitx  '
+    type: real
+    value: 200e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 612.0]
+    rotation: 0
+    state: enabled
+- name: entry_var_sample_rate_osmosdr
+  id: variable_qtgui_entry
+  parameters:
+    comment: 7,2,1,2
+    gui_hint: 7,2,1,2
+    label: Sample rate Osmosdr
+    type: real
+    value: 1.152e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 708.0]
+    rotation: 0
+    state: enabled
+- name: sample_rate
+  id: variable
+  parameters:
+    comment: sample_rate = sample_rate_osmosdr
+    value: entry_var_sample_rate_osmosdr
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 12.0]
+    rotation: 0
+    state: enabled
+- name: sweeping
+  id: variable
+  parameters:
+    comment: ''
+    value: '"False"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 244.0]
+    rotation: 0
+    state: true
+- name: var_record
+  id: variable
+  parameters:
+    comment: ''
+    value: '"False"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 308.0]
+    rotation: 0
+    state: true
+- name: var_waveform_
   id: variable_qtgui_chooser
   parameters:
     comment: 4,2,1,2
@@ -265,6 +265,18 @@ blocks:
     coordinate: [160, 372.0]
     rotation: 0
     state: enabled
+- name: vector_data
+  id: variable
+  parameters:
+    comment: ''
+    value: range(512)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 12.0]
+    rotation: 0
+    state: enabled
 - name: blocks_vector_source_x_0
   id: blocks_vector_source_x
   parameters:
@@ -282,7 +294,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [256, 260.0]
+    coordinate: [288, 260.0]
     rotation: 0
     state: enabled
 - name: epy_module_client
@@ -292,44 +304,55 @@ blocks:
     comment: ''
     source_code: "# this module will be imported in the into your flowgraph\nimport\
       \ socket\nfrom gnuradio import eng_notation\nfrom PyQt5 import Qt\n\ndef client(tt):\n\
-      \    # Storage variables initial values\n    variables=[\"frequency_\",\"waveform_\"\
-      ,\"amplitude_\",\"offset_\",\"sample_rate_gr\",\"sample_rate_osmosdr\",\"carrying_frequency\"\
-      ,\"measured_frequency\"]\n    old_values=[]\n    for variable in variables:\n\
-      \        exec(\"old_values.append(tt.get_{}())\".format(variable))\n       \
-      \ # Convert default values of entry controls to eng notation \n        if(variable\
-      \ == \"waveform_\"):\n            continue # Skip if not an entry control\n\
-      \        Qt.QMetaObject.invokeMethod(eval(\"tt._{}_line_edit\".format(variable)),\
-      \ \"setText\", Qt.Q_ARG(\"QString\", eng_notation.num_to_str(eval(\"tt.{}\"\
-      .format(variable)))))\n    while True:\n        # Try to connect\n        host\
-      \ = '192.168.137.8'\n        port = 4242\n        client_socket = socket.socket()\n\
-      \        try:\n            client_socket.connect((host, port))\n        except:\n\
-      \            pass\n        if(client_socket.getsockname()[0] != \"0.0.0.0\"\
-      ):\n            # Connected\n            print(\"Connected to server\")\n  \
-      \          while True:\n                # Check if variables have changed to\
-      \ send the new values\n                for i, variable in enumerate(variables):\n\
-      \                    if(eval(\"tt.get_{}()\".format(variable))!=old_values[i]):\n\
-      \                        value=eval(\"tt.get_{}()\".format(variable))\n    \
-      \                    if(variable==\"waveform_\"):\n                        \
-      \    value=value+100\n\n                        message=variable + \"=\" + str(value)\
-      \ + \">\" # Encoding message to send it\n                        client_socket.send(message.encode())\n\
-      \                        # Register updated variable value\n               \
-      \         old_values[i]=eval(\"tt.get_{}()\".format(variable))\n           \
-      \             # testing\n                        # tt._frequency__tool_bar.setStyleSheet(\"\
-      QLabel { }\")\n                        \n                    # Check if \"entry\"\
-      \ controls text has been modified to change its color (indicating pending \"\
-      enter\" key)\n                    try: # To ignore when incorrect value is typed\n\
-      \                        if(variable==\"waveform_\"): # If the current variable\
-      \ is not an \"entry\" ignore\n                            pass\n\n         \
-      \               if(eval(\"eng_notation.str_to_num(str(tt._{var_name}_line_edit.text()))!=float(tt.get_{var_name}())\"\
-      .format(var_name=variable))):\n                            if(eval(\"tt._{}_tool_bar.styleSheet()\"\
+      \    # Storage variables initial values\n    variables=[\"entry_var_frequency_\"\
+      ,\"var_waveform_\",\"entry_var_amplitude_\",\"entry_var_offset_\",\"entry_var_sample_rate_gr\"\
+      ,\"entry_var_sample_rate_osmosdr\",\"entry_var_carrying_frequency\",\"entry_var_measured_frequency\"\
+      ,\"entry_start_freq\",\"entry_span_freq\",\"entry_end_freq\"]\n    old_values=[]\n\
+      \    for variable in variables:\n        exec(\"old_values.append(tt.get_{}())\"\
+      .format(variable))\n        # Convert default values of entry controls to eng\
+      \ notation \n        if(\"entry\" in variable):\n            Qt.QMetaObject.invokeMethod(eval(\"\
+      tt._{}_line_edit\".format(variable)), \"setText\", Qt.Q_ARG(\"QString\", eng_notation.num_to_str(eval(\"\
+      tt.{}\".format(variable)))))\n    while True:\n        # Try to connect\n  \
+      \      host = '192.168.137.8'\n        port = 4242\n        client_socket =\
+      \ socket.socket()\n        try:\n            client_socket.connect((host, port))\n\
+      \        except:\n            pass\n        if(client_socket.getsockname()[0]\
+      \ != \"0.0.0.0\"):\n            # Connected\n            print(\"Connected to\
+      \ server\")\n            while True:\n                # Check if variables have\
+      \ changed to send the new values\n                for i, variable in enumerate(variables):\n\
+      \                    if((eval(\"tt.get_{}()\".format(variable))!=old_values[i])\
+      \ & (\"var\" in variable)):\n                        value=eval(\"tt.get_{}()\"\
+      .format(variable))\n                        if(variable==\"var_waveform_\"):\n\
+      \                            value=value+100\n\n                        message=variable\
+      \ + \"=\" + str(value) + \">\" # Encoding message to send it\n             \
+      \           client_socket.send(message.encode())\n                        #\
+      \ Register updated variable value\n                        old_values[i]=eval(\"\
+      tt.get_{}()\".format(variable))                    \n                    # Check\
+      \ if \"entry\" controls text has been modified to change its color (indicating\
+      \ pending \"enter\" key)\n                    if \"entry\" in variable:\n  \
+      \                      try: # To catch when incorrect value is typed\n     \
+      \                       if(eval(\"eng_notation.str_to_num(str(tt._{var_name}_line_edit.text()))!=float(tt.get_{var_name}())\"\
+      .format(var_name=variable))):\n                                if(eval(\"tt._{}_tool_bar.styleSheet()\"\
       .format(variable))!=\"QLabel {background-color: yellow}\"):\n              \
-      \                  Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\".format(variable)),\
-      \ \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"QLabel {background-color: yellow}\"\
-      ))\n                        else:\n                            if(eval(\"tt._{}_tool_bar.styleSheet()\"\
-      .format(variable))!=\"\"):\n                                Qt.QMetaObject.invokeMethod(eval(\"\
+      \                      Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\"\
+      .format(variable)), \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"QLabel {background-color:\
+      \ yellow}\"))\n                            else:\n                         \
+      \       if(eval(\"tt._{}_tool_bar.styleSheet()\".format(variable))!=\"\"):\n\
+      \                                    Qt.QMetaObject.invokeMethod(eval(\"tt._{}_tool_bar\"\
+      .format(variable)), \"setStyleSheet\", Qt.Q_ARG(\"QString\", \"\"))        \
+      \                \n                        except:\n                       \
+      \     if(eval(\"tt._{}_tool_bar.styleSheet()\".format(variable))!=\"QLabel {background-color:\
+      \ red}\"):\n                                    Qt.QMetaObject.invokeMethod(eval(\"\
       tt._{}_tool_bar\".format(variable)), \"setStyleSheet\", Qt.Q_ARG(\"QString\"\
-      , \"\"))                        \n                    except:\n            \
-      \            pass\n                    \n                # client_socket.close()\n"
+      , \"QLabel {background-color: red}\"))\n                            pass\n \
+      \                   # Check if \"start\" has been pressed\n                \
+      \    if((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text()\
+      \ == \"Start\")):\n                        tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText(\"\
+      Stop\")\n                        tt.set_btn_start(0)\n                     \
+      \   tt.set_sweeping(\"True\")\n                    elif((tt.get_btn_start()==1)\
+      \ & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == \"Stop\")):\n\
+      \                        tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText(\"\
+      Start\")\n                        tt.set_btn_start(0)\n                    \
+      \    tt.set_sweeping(\"False\")\n                # client_socket.close()\n"
   states:
     bus_sink: false
     bus_source: false
@@ -343,17 +366,19 @@ blocks:
     alias: ''
     comment: ''
     source_code: "# this module will be imported in the into your flowgraph\n\nimport\
-      \ numpy as np\nimport zmq\nimport array\nfrom PyQt5 import Qt\n\ndef sweep(tt):\n\
-      \    while True:\n        # Check if \"start\" has been pressed\n        if((tt.get_btn_start()==1)\
-      \ & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == \"Start\")):\n\
-      \            tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText(\"Stop\"\
-      )\n            tt.set_btn_start(0)\n        elif((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text()\
-      \ == \"Stop\")):\n            tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText(\"\
-      Start\")\n            tt.set_btn_start(0)\n        # Retrieve start, span and\
-      \ end frequency\n        # start_freq=tt.get_start_freq()\n        # span_freq=tt.get_span_freq()\n\
-      \        # stop_freq=tt.get_end_freq()\n        # pass\n        # Nt=10\n  \
-      \      # context=zmq.Context()\n        # sock1=context.socket(zmq.SUB)\n  \
-      \      # sock1.connect(\"tcp://192.168.137.8:5555\");\n        # sock1.setsockopt(zmq.SUBSCRIBE,b\"\
+      \ numpy as np\nimport zmq\nimport array\nfrom PyQt5 import Qt\nimport time\n\
+      \ndef sweep(tt):\n    while True:\n        # Retrieve start, span and end frequency\n\
+      \        start_freq=tt.get_entry_start_freq()\n        span_freq=tt.get_entry_span_freq()\n\
+      \        end_freq=tt.get_entry_end_freq()\n        # Calculate the frequency\
+      \ range\n        frequencies=np.arange(start_freq,end_freq,span_freq).tolist()\n\
+      \        frequencies.append(end_freq)\n        # Main procees\n        while\
+      \ tt.get_sweeping()==\"True\":\n            for f in frequencies:\n        \
+      \        tt.set_entry_var_carrying_frequency(float(f))\n                time.sleep(3)\
+      \ # Sleep for 3 seconds\n                if tt.get_sweeping()==\"False\":\n\
+      \                    break\n                # Setting the test frequency\n\n\
+      \            # If the next frequency is \n\n\n        # pass\n        # Nt=10\n\
+      \        # context=zmq.Context()\n        # sock1=context.socket(zmq.SUB)\n\
+      \        # sock1.connect(\"tcp://192.168.137.8:5555\");\n        # sock1.setsockopt(zmq.SUBSCRIBE,b\"\
       \")\n        # vector1=[]\n        # print(\"start\")\n        # while(len(vector1)<Nt):\n\
       \        #     raw_recv=sock1.recv()\n        #     recv=array.array('f',raw_recv)\
       \ #float\n        #     # recv=array.array('l',raw_recv) #integer\n        #\
@@ -398,7 +423,7 @@ blocks:
     color9: '"dark green"'
     comment: tab_widget_0@0:1,0,1,4
     ctrlpanel: 'False'
-    fc: measured_frequency
+    fc: entry_var_measured_frequency
     fftsize: '4096'
     freqhalf: 'True'
     grid: 'True'

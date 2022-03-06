@@ -4,20 +4,29 @@ import numpy as np
 import zmq
 import array
 from PyQt5 import Qt
+import time
 
 def sweep(tt):
     while True:
-        # Check if "start" has been pressed
-        if((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == "Start")):
-            tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText("Stop")
-            tt.set_btn_start(0)
-        elif((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == "Stop")):
-            tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText("Start")
-            tt.set_btn_start(0)
         # Retrieve start, span and end frequency
-        # start_freq=tt.get_start_freq()
-        # span_freq=tt.get_span_freq()
-        # stop_freq=tt.get_end_freq()
+        start_freq=tt.get_entry_start_freq()
+        span_freq=tt.get_entry_span_freq()
+        end_freq=tt.get_entry_end_freq()
+        # Calculate the frequency range
+        frequencies=np.arange(start_freq,end_freq,span_freq).tolist()
+        frequencies.append(end_freq)
+        # Main procees
+        while tt.get_sweeping()=="True":
+            for f in frequencies:
+                tt.set_entry_var_carrying_frequency(float(f))
+                time.sleep(3) # Sleep for 3 seconds
+                if tt.get_sweeping()=="False":
+                    break
+                # Setting the test frequency
+
+            # If the next frequency is 
+
+
         # pass
         # Nt=10
         # context=zmq.Context()

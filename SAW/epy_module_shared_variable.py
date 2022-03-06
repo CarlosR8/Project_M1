@@ -49,7 +49,7 @@ class Shared_Variable:
 
 def main(tt):
 	# Create list of shared variables
-	shared_variables = ["sample_rate_osmosdr","measured_frequency"]
+	shared_variables = ["entry_var_sample_rate_osmosdr","entry_var_measured_frequency"]
 	sFile = Shared_Variable(shared_variables)
 	while True:
 		try:

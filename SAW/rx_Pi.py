@@ -30,8 +30,8 @@ class rx_Pi(gr.top_block):
         ##################################################
         # Variables
         ##################################################
-        self.sample_rate_osmosdr = sample_rate_osmosdr = 1.152e6
-        self.measured_frequency = measured_frequency = 434e6
+        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr = 1.152e6
+        self.entry_var_measured_frequency = entry_var_measured_frequency = 434e6
 
         ##################################################
         # Blocks
@@ -41,8 +41,8 @@ class rx_Pi(gr.top_block):
             args="numchan=" + str(1) + " " + ""
         )
         self.osmosdr_source_0.set_time_unknown_pps(osmosdr.time_spec_t())
-        self.osmosdr_source_0.set_sample_rate(sample_rate_osmosdr)
-        self.osmosdr_source_0.set_center_freq(measured_frequency, 0)
+        self.osmosdr_source_0.set_sample_rate(entry_var_sample_rate_osmosdr)
+        self.osmosdr_source_0.set_center_freq(entry_var_measured_frequency, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)
         self.osmosdr_source_0.set_dc_offset_mode(0, 0)
         self.osmosdr_source_0.set_iq_balance_mode(0, 0)
@@ -60,19 +60,19 @@ class rx_Pi(gr.top_block):
         self.connect((self.osmosdr_source_0, 0), (self.zeromq_pub_sink_0, 0))
 
 
-    def get_sample_rate_osmosdr(self):
-        return self.sample_rate_osmosdr
+    def get_entry_var_sample_rate_osmosdr(self):
+        return self.entry_var_sample_rate_osmosdr
 
-    def set_sample_rate_osmosdr(self, sample_rate_osmosdr):
-        self.sample_rate_osmosdr = sample_rate_osmosdr
-        self.osmosdr_source_0.set_sample_rate(self.sample_rate_osmosdr)
+    def set_entry_var_sample_rate_osmosdr(self, entry_var_sample_rate_osmosdr):
+        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr
+        self.osmosdr_source_0.set_sample_rate(self.entry_var_sample_rate_osmosdr)
 
-    def get_measured_frequency(self):
-        return self.measured_frequency
+    def get_entry_var_measured_frequency(self):
+        return self.entry_var_measured_frequency
 
-    def set_measured_frequency(self, measured_frequency):
-        self.measured_frequency = measured_frequency
-        self.osmosdr_source_0.set_center_freq(self.measured_frequency, 0)
+    def set_entry_var_measured_frequency(self, entry_var_measured_frequency):
+        self.entry_var_measured_frequency = entry_var_measured_frequency
+        self.osmosdr_source_0.set_center_freq(self.entry_var_measured_frequency, 0)
 
 def snipfcn_snippet_0(self):
     print("Starting Receiver")

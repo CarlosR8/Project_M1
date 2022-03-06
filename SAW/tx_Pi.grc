@@ -32,7 +32,7 @@ options:
     state: enabled
 
 blocks:
-- name: amplitude_
+- name: entry_var_amplitude_
   id: variable
   parameters:
     comment: ''
@@ -41,10 +41,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 12.0]
+    coordinate: [640, 12.0]
     rotation: 0
     state: true
-- name: carrying_frequency
+- name: entry_var_carrying_frequency
   id: variable
   parameters:
     comment: ''
@@ -53,10 +53,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [704, 12.0]
+    coordinate: [208, 76.0]
     rotation: 0
     state: true
-- name: frequency_
+- name: entry_var_frequency_
   id: variable
   parameters:
     comment: ''
@@ -65,10 +65,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 12.0]
+    coordinate: [376, 12.0]
     rotation: 0
     state: true
-- name: measured_frequency
+- name: entry_var_measured_frequency
   id: variable
   parameters:
     comment: ''
@@ -77,10 +77,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 12.0]
+    coordinate: [792, 76.0]
     rotation: 0
     state: true
-- name: offset_
+- name: entry_var_offset_
   id: variable
   parameters:
     comment: ''
@@ -89,10 +89,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 12.0]
+    coordinate: [784, 12.0]
     rotation: 0
     state: true
-- name: sample_rate_gr
+- name: entry_var_sample_rate_gr
   id: variable
   parameters:
     comment: ''
@@ -104,7 +104,7 @@ blocks:
     coordinate: [208, 12.0]
     rotation: 0
     state: enabled
-- name: sample_rate_osmosdr
+- name: entry_var_sample_rate_osmosdr
   id: variable
   parameters:
     comment: ''
@@ -113,10 +113,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 12.0]
+    coordinate: [640, 76.0]
     rotation: 0
     state: enabled
-- name: waveform_
+- name: var_waveform_
   id: variable
   parameters:
     comment: 'Constant = 100
@@ -135,7 +135,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 12.0]
+    coordinate: [520, 12.0]
     rotation: 0
     state: true
 - name: analog_const_source_x_0
@@ -160,16 +160,16 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    amp: amplitude_
+    amp: entry_var_amplitude_
     comment: ''
-    freq: frequency_
+    freq: entry_var_frequency_
     maxoutbuf: '0'
     minoutbuf: '0'
-    offset: offset_
+    offset: entry_var_offset_
     phase: '0'
-    samp_rate: sample_rate_gr
+    samp_rate: entry_var_sample_rate_gr
     type: float
-    waveform: waveform_
+    waveform: var_waveform_
   states:
     bus_sink: false
     bus_source: false
@@ -216,8 +216,8 @@ blocks:
       ) as f:\n\t\t\t\tcontent = f.readline()\n\t\t\t\tself.__dict__ = json.loads(content)\n\
       \t\t\t# Once read, remove it\t\n\t\t\tos.remove(\"shared_variables.json\")\t\
       \n\t\t\n# \n\ndef server(tt):\n\twhile True:\n\t\t# Create list of shared variables\n\
-      \t\tshared_variables = [\"sample_rate_osmosdr\",\"measured_frequency\"]\n\t\t\
-      sFile = Shared_Variable(shared_variables)\n\t\t#Save current local variables\
+      \t\tshared_variables = [\"entry_var_sample_rate_osmosdr\",\"entry_var_measured_frequency\"\
+      ]\n\t\tsFile = Shared_Variable(shared_variables)\n\t\t#Save current local variables\
       \ to share them\n\t\tsFile.save_variables(tt)\n\n\t\t# Configure socket\n\t\t\
       sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n\t\tsock.setsockopt(socket.SOL_SOCKET,\
       \ socket.SO_REUSEADDR, 1)\n\t\tsock.bind(('192.168.137.8',4242))\n\t\t# Listen\n\
@@ -252,9 +252,9 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    carrier_freq: carrying_frequency
+    carrier_freq: entry_var_carrying_frequency
     comment: ''
-    samp_rate: sample_rate_gr
+    samp_rate: entry_var_sample_rate_gr
   states:
     bus_sink: false
     bus_source: false
