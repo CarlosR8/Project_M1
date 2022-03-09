@@ -1,5 +1,6 @@
 __pycache__/
 Symbolic links/
+data/
 test.py
 data.txt
 # git rm --cached -r .

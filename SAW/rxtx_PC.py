@@ -75,8 +75,11 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.vector_length = vector_length = 1024
         self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr = 1.152e6
-        self.vector_data = vector_data = range(512)
+        self.x_step = x_step = 1e6
+        self.x_start = x_start = 86e6
+        self.vector_data = vector_data = range(vector_length)
         self.var_waveform_ = var_waveform_ = 2
         self.var_record = var_record = "False"
         self.sweeping = sweeping = "False"
@@ -87,9 +90,9 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.entry_var_frequency_ = entry_var_frequency_ = 10e3
         self.entry_var_carrying_frequency = entry_var_carrying_frequency = 86.8e6
         self.entry_var_amplitude_ = entry_var_amplitude_ = 300e-3
-        self.entry_start_freq = entry_start_freq = 300e-3
-        self.entry_span_freq = entry_span_freq = 0.5
-        self.entry_end_freq = entry_end_freq = 0.5
+        self.entry_start_freq = entry_start_freq = 86.7e6
+        self.entry_span_freq = entry_span_freq = 1e3
+        self.entry_end_freq = entry_end_freq = 86.756e6
         self.btn_start = btn_start = 0
 
         ##################################################
@@ -144,9 +147,9 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.qtgui_vector_sink_f_0 = qtgui.vector_sink_f(
-            512,
-            0,
-            1.0,
+            vector_length,
+            x_start,
+            1e3,
             "Frequency (Hz)",
             "Relative Gain (dB)",
             "",
@@ -252,7 +255,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, -14, 0, "")
         self.qtgui_freq_sink_x_0.enable_autoscale(False)
         self.qtgui_freq_sink_x_0.enable_grid(True)
-        self.qtgui_freq_sink_x_0.set_fft_average(0.1)
+        self.qtgui_freq_sink_x_0.set_fft_average(0.2)
         self.qtgui_freq_sink_x_0.enable_axis_labels(True)
         self.qtgui_freq_sink_x_0.enable_control_panel(False)
 
@@ -391,7 +394,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
         for c in range(3, 4):
             self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
-        self.blocks_vector_source_x_0 = blocks.vector_source_f(vector_data, True, 512, [])
+        self.blocks_vector_source_x_0 = blocks.vector_source_f(vector_data, True, vector_length, [])
 
 
         ##################################################
@@ -407,6 +410,13 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
+    def get_vector_length(self):
+        return self.vector_length
+
+    def set_vector_length(self, vector_length):
+        self.vector_length = vector_length
+        self.set_vector_data(range(self.vector_length))
+
     def get_entry_var_sample_rate_osmosdr(self):
         return self.entry_var_sample_rate_osmosdr
 
@@ -414,6 +424,19 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr
         Qt.QMetaObject.invokeMethod(self._entry_var_sample_rate_osmosdr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_sample_rate_osmosdr)))
         self.set_sample_rate(self.entry_var_sample_rate_osmosdr)
+
+    def get_x_step(self):
+        return self.x_step
+
+    def set_x_step(self, x_step):
+        self.x_step = x_step
+
+    def get_x_start(self):
+        return self.x_start
+
+    def set_x_start(self, x_start):
+        self.x_start = x_start
+        self.qtgui_vector_sink_f_0.set_x_axis(self.x_start, 1e3)
 
     def get_vector_data(self):
         return self.vector_data
