@@ -50,12 +50,13 @@ def client(tt):
                                     Qt.QMetaObject.invokeMethod(eval("tt._{}_tool_bar".format(variable)), "setStyleSheet", Qt.Q_ARG("QString", "QLabel {background-color: red}"))
                             pass
                     # Check if "start" has been pressed
-                    if((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == "Start")):
-                        tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText("Stop")
+                    btn_index=5
+                    if((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().text() == "Start")):
+                        tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().setText("Stop")
                         tt.set_btn_start(0)
                         tt.set_sweeping("True")
-                    elif((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(4).widget().text() == "Stop")):
-                        tt.tab_widget_0_grid_layout_1.itemAt(4).widget().setText("Start")
+                    elif((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().text() == "Stop")):
+                        tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().setText("Start")
                         tt.set_btn_start(0)
                         tt.set_sweeping("False")
                 # client_socket.close()

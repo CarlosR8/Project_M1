@@ -77,9 +77,10 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         self.vector_length = vector_length = 1024
         self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr = 1.152e6
-        self.x_step = x_step = 1e6
-        self.x_start = x_start = 86e6
+        self.x_step = x_step = 1
+        self.x_start = x_start = 86
         self.vector_data = vector_data = range(vector_length)
+        self.variable_qtgui_chooser_0 = variable_qtgui_chooser_0 = 0
         self.var_waveform_ = var_waveform_ = 2
         self.var_record = var_record = "False"
         self.sweeping = sweeping = "False"
@@ -90,9 +91,9 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.entry_var_frequency_ = entry_var_frequency_ = 10e3
         self.entry_var_carrying_frequency = entry_var_carrying_frequency = 86.8e6
         self.entry_var_amplitude_ = entry_var_amplitude_ = 300e-3
-        self.entry_start_freq = entry_start_freq = 86.7e6
+        self.entry_start_freq = entry_start_freq = 433.5e6
         self.entry_span_freq = entry_span_freq = 1e3
-        self.entry_end_freq = entry_end_freq = 86.756e6
+        self.entry_end_freq = entry_end_freq = 434.55e6
         self.btn_start = btn_start = 0
 
         ##################################################
@@ -127,6 +128,35 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://192.168.137.8:5555', 100, False, -1)
         # Create the options list
+        self._variable_qtgui_chooser_0_options = [0, 1]
+        # Create the labels list
+        self._variable_qtgui_chooser_0_labels = ['Sweep carrier frequency', 'Sweep generated frequency']
+        # Create the combo box
+        # Create the radio buttons
+        self._variable_qtgui_chooser_0_group_box = Qt.QGroupBox('Sweeping method' + ": ")
+        self._variable_qtgui_chooser_0_box = Qt.QHBoxLayout()
+        class variable_chooser_button_group(Qt.QButtonGroup):
+            def __init__(self, parent=None):
+                Qt.QButtonGroup.__init__(self, parent)
+            @pyqtSlot(int)
+            def updateButtonChecked(self, button_id):
+                self.button(button_id).setChecked(True)
+        self._variable_qtgui_chooser_0_button_group = variable_chooser_button_group()
+        self._variable_qtgui_chooser_0_group_box.setLayout(self._variable_qtgui_chooser_0_box)
+        for i, _label in enumerate(self._variable_qtgui_chooser_0_labels):
+            radio_button = Qt.QRadioButton(_label)
+            self._variable_qtgui_chooser_0_box.addWidget(radio_button)
+            self._variable_qtgui_chooser_0_button_group.addButton(radio_button, i)
+        self._variable_qtgui_chooser_0_callback = lambda i: Qt.QMetaObject.invokeMethod(self._variable_qtgui_chooser_0_button_group, "updateButtonChecked", Qt.Q_ARG("int", self._variable_qtgui_chooser_0_options.index(i)))
+        self._variable_qtgui_chooser_0_callback(self.variable_qtgui_chooser_0)
+        self._variable_qtgui_chooser_0_button_group.buttonClicked[int].connect(
+            lambda i: self.set_variable_qtgui_chooser_0(self._variable_qtgui_chooser_0_options[i]))
+        self.tab_widget_0_grid_layout_1.addWidget(self._variable_qtgui_chooser_0_group_box, 2, 0, 1, 1)
+        for r in range(2, 3):
+            self.tab_widget_0_grid_layout_1.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
+        # Create the options list
         self._var_waveform__options = [0, 1, 2, 3, 4, 5]
         # Create the labels list
         self._var_waveform__labels = ['Constant', 'Sine', 'Cosine', 'Square', 'Triangle', 'Saw Tooth']
@@ -149,17 +179,17 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.qtgui_vector_sink_f_0 = qtgui.vector_sink_f(
             vector_length,
             x_start,
-            1e3,
-            "Frequency (Hz)",
-            "Relative Gain (dB)",
+            x_step,
+            "Frequency (MHz)",
+            "Relative Mean voltage",
             "",
             1 # Number of inputs
         )
         self.qtgui_vector_sink_f_0.set_update_time(0.10)
         self.qtgui_vector_sink_f_0.set_y_axis(-140, 10)
         self.qtgui_vector_sink_f_0.enable_autoscale(True)
-        self.qtgui_vector_sink_f_0.enable_grid(False)
-        self.qtgui_vector_sink_f_0.set_x_axis_units("Hz")
+        self.qtgui_vector_sink_f_0.enable_grid(True)
+        self.qtgui_vector_sink_f_0.set_x_axis_units("MHz")
         self.qtgui_vector_sink_f_0.set_y_axis_units("dB")
         self.qtgui_vector_sink_f_0.set_ref_level(0)
 
@@ -194,7 +224,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             1 #number of inputs
         )
         self.qtgui_time_sink_x_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0.set_y_axis(-1.25, 1.25)
+        self.qtgui_time_sink_x_0.set_y_axis(-1.1, 1.1)
 
         self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
@@ -250,12 +280,12 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             1
         )
         self.qtgui_freq_sink_x_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0.set_y_axis(-77, -5)
+        self.qtgui_freq_sink_x_0.set_y_axis(-90, -5)
         self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
         self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, -14, 0, "")
         self.qtgui_freq_sink_x_0.enable_autoscale(False)
         self.qtgui_freq_sink_x_0.enable_grid(True)
-        self.qtgui_freq_sink_x_0.set_fft_average(0.2)
+        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
         self.qtgui_freq_sink_x_0.enable_axis_labels(True)
         self.qtgui_freq_sink_x_0.enable_control_panel(False)
 
@@ -430,13 +460,14 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
 
     def set_x_step(self, x_step):
         self.x_step = x_step
+        self.qtgui_vector_sink_f_0.set_x_axis(self.x_start, self.x_step)
 
     def get_x_start(self):
         return self.x_start
 
     def set_x_start(self, x_start):
         self.x_start = x_start
-        self.qtgui_vector_sink_f_0.set_x_axis(self.x_start, 1e3)
+        self.qtgui_vector_sink_f_0.set_x_axis(self.x_start, self.x_step)
 
     def get_vector_data(self):
         return self.vector_data
@@ -444,6 +475,13 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
     def set_vector_data(self, vector_data):
         self.vector_data = vector_data
         self.blocks_vector_source_x_0.set_data(self.vector_data, [])
+
+    def get_variable_qtgui_chooser_0(self):
+        return self.variable_qtgui_chooser_0
+
+    def set_variable_qtgui_chooser_0(self, variable_qtgui_chooser_0):
+        self.variable_qtgui_chooser_0 = variable_qtgui_chooser_0
+        self._variable_qtgui_chooser_0_callback(self.variable_qtgui_chooser_0)
 
     def get_var_waveform_(self):
         return self.var_waveform_
