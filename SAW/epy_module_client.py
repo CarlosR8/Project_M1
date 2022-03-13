@@ -50,7 +50,7 @@ def client(tt):
                                     Qt.QMetaObject.invokeMethod(eval("tt._{}_tool_bar".format(variable)), "setStyleSheet", Qt.Q_ARG("QString", "QLabel {background-color: red}"))
                             pass
                     # Check if "start" has been pressed
-                    btn_index=5
+                    btn_index=6
                     if((tt.get_btn_start()==1) & (tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().text() == "Start")):
                         tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().setText("Stop")
                         tt.set_btn_start(0)
