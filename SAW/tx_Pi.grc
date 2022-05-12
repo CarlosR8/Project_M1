@@ -65,7 +65,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 12.0]
+    coordinate: [496, 12.0]
     rotation: 0
     state: true
 - name: entry_var_measured_frequency
@@ -77,7 +77,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 76.0]
+    coordinate: [664, 76.0]
     rotation: 0
     state: true
 - name: entry_var_offset_
@@ -113,7 +113,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [640, 76.0]
+    coordinate: [496, 76.0]
     rotation: 0
     state: enabled
 - name: var_waveform_
@@ -135,7 +135,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 12.0]
+    coordinate: [376, 12.0]
     rotation: 0
     state: true
 - name: analog_const_source_x_0
@@ -199,20 +199,19 @@ blocks:
     alias: ''
     comment: ''
     source_code: "# this module will be imported in the into your flowgraph\nimport\
-      \ socket\n# import string\nimport json  # To save variables as json\nimport\
-      \ ntpath  # To retrieve file name out of address\nimport os.path\nfrom os import\
-      \ path\n\n# Declaring class for \"shared variable\" object (communication between\
-      \ flowcharts)\nclass Shared_Variable:\n\tnames = [] # List of variable names\n\
-      \tvalues = [] # List of variable values\n\tshared_variables = [] # List of variables\
-      \ set on init\n\tdef __init__(self,shared_variables_):\n\t\tself.shared_variables\
-      \ = shared_variables_\n\t\tpass\n\tdef clear(self):\n\t\tself.names = []\n\t\
-      \tself.values = []\n\tdef save_variables(self, tt):\n\t\t# try:\n\t\t\tself.clear()\n\
-      \t\t\tfor variable in self.shared_variables:\n\t\t\t\tself.names.append(variable)\n\
-      \t\t\t\tself.values.append(eval(\"tt.get_{}()\".format(variable)))\n\t\t\t#\
-      \ Saving in json file\n\t\t\tf = open(\"shared_variables.json\", \"w\")\n\t\t\
-      \tf.write(json.dumps(self.__dict__))\n\t\t\tf.close()\n\t\t# except:\n\t\t#\
-      \ \tpass\n\tdef retrieve_variables(self, tt):\n\t\t# Check if file exist\n\t\
-      \tif(path.exists(\"shared_variables.json\")):\n\t\t\twith open(\"shared_variables.json\"\
+      \ socket\nimport json  # To save variables as json\nimport ntpath  # To retrieve\
+      \ file name out of address\nimport os.path\nfrom os import path\n\n# Declaring\
+      \ class for \"shared variable\" object (communication between flowcharts)\n\
+      class Shared_Variable:\n\tnames = [] # List of variable names\n\tvalues = []\
+      \ # List of variable values\n\tshared_variables = [] # List of variables set\
+      \ on init\n\tdef __init__(self,shared_variables_):\n\t\tself.shared_variables\
+      \ = shared_variables_\n\tdef clear(self):\n\t\tself.names = []\n\t\tself.values\
+      \ = []\n\tdef save_variables(self, tt):\n\t\t\tself.clear()\n\t\t\tfor variable\
+      \ in self.shared_variables:\n\t\t\t\tself.names.append(variable)\n\t\t\t\tself.values.append(eval(\"\
+      tt.get_{}()\".format(variable)))\n\t\t\t# Saving in json file\n\t\t\tf = open(\"\
+      shared_variables.json\", \"w\")\n\t\t\tf.write(json.dumps(self.__dict__))\n\t\
+      \t\tf.close()\n\tdef retrieve_variables(self, tt):\n\t\t# Check if file exist\n\
+      \t\tif(path.exists(\"shared_variables.json\")):\n\t\t\twith open(\"shared_variables.json\"\
       ) as f:\n\t\t\t\tcontent = f.readline()\n\t\t\t\tself.__dict__ = json.loads(content)\n\
       \t\t\t# Once read, remove it\t\n\t\t\tos.remove(\"shared_variables.json\")\t\
       \n\t\t\n# \n\ndef server(tt):\n\twhile True:\n\t\t# Create list of shared variables\n\
@@ -225,21 +224,20 @@ blocks:
       \t\tconn,addr=sock.accept()\n\t\twith conn:\n\t\t\tprint('Connected from: ',\
       \ addr)\n\t\t\tmessage = \"\" # Variable to store complete message\n\t\t\twhile\
       \ True:\n\t\t\t\t# Get text\n\t\t\t\tdata=conn.recv(1)\n\t\t\t\tif data:\n\t\
-      \t\t\t\tdata=data.decode()\n\t\t\t\t\tmessage = message+data\n\t\t\t\t\t# print(message)\n\
-      \t\t\t\t\tif '>' in message: # Delimeter to indicate end of message\n\t\t\t\t\
-      \t\ttry:\n\t\t\t\t\t\t\t# Changing local variables\n\t\t\t\t\t\t\tmessage =\
-      \ message.replace('>','').strip()\n\t\t\t\t\t\t\t[var_name, var_value] = message.split(\"\
-      =\")\n\t\t\t\t\t\t\tcommand = \"tt.{}=float({})\".format(var_name, var_value)\n\
-      \t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tcommand = \"tt.set_{}(float({}))\"\
-      .format(var_name, var_value)\n\t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tprint(\"\
-      The new value of the variable {} is: {}\".format(var_name, var_value))\n\t\t\
-      \t\t\t\t\tmessage = \"\" # Reset message variable\n\n\t\t\t\t\t\t\t# Save current\
-      \ values on \"shared variables\" file\n\t\t\t\t\t\t\tsFile.save_variables(tt)\n\
-      \t\t\t\t\t\texcept:\n\t\t\t\t\t\t\tmessage = \"\" # Reset message variable\n\
-      \t\t\t\t\t\t\tprint(\"Error: variable not set\")\t\t\t\t\t\t\n\t\t\t\t\t# Quit\n\
-      \t\t\t\t\tif 'quit' in data:\n\t\t\t\t\t\tprint(\"Closing connection...\")\n\
-      \t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\t\t\t\t\t\tsock.close()\n\t\t\t\
-      \t\t\tbreak # Back to listen loop\n\t\t\t# C"
+      \t\t\t\tdata=data.decode()\n\t\t\t\t\tmessage = message+data\n\t\t\t\t\tif '>'\
+      \ in message: # Delimiter to indicate end of message\n\t\t\t\t\t\ttry:\n\t\t\
+      \t\t\t\t\t# Changing local variables\n\t\t\t\t\t\t\tmessage = message.replace('>','').strip()\n\
+      \t\t\t\t\t\t\t[var_name, var_value] = message.split(\"=\")\n\t\t\t\t\t\t\tcommand\
+      \ = \"tt.{}=float({})\".format(var_name, var_value)\n\t\t\t\t\t\t\texec(command)\
+      \ \n\t\t\t\t\t\t\tcommand = \"tt.set_{}(float({}))\".format(var_name, var_value)\n\
+      \t\t\t\t\t\t\texec(command) \n\t\t\t\t\t\t\tprint(\"The new value of the variable\
+      \ {} is: {}\".format(var_name, var_value))\n\t\t\t\t\t\t\tmessage = \"\" # Reset\
+      \ message variable\n\n\t\t\t\t\t\t\t# Save current values on \"shared variables\"\
+      \ file\n\t\t\t\t\t\t\tsFile.save_variables(tt)\n\t\t\t\t\t\texcept:\n\t\t\t\t\
+      \t\t\tmessage = \"\" # Reset message variable\n\t\t\t\t\t\t\tprint(\"Error:\
+      \ variable not set\")\t\t\t\t\t\t\n\t\t\t\t\t# Quit\n\t\t\t\t\tif 'quit' in\
+      \ message:\n\t\t\t\t\t\tprint(\"Closing connection...\")\n\t\t\t\t\t\tsock.shutdown(socket.SHUT_RDWR)\n\
+      \t\t\t\t\t\tsock.close()\n\t\t\t\t\t\tbreak # Back to listen loop"
   states:
     bus_sink: false
     bus_source: false

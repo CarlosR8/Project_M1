@@ -142,8 +142,10 @@ blocks:
 - name: entry_var_measured_frequency
   id: variable_qtgui_entry
   parameters:
-    comment: 7,0,1,2
-    gui_hint: 7,0,1,2
+    comment: '6,2,1,2
+
+      before: 7,0,1,2'
+    gui_hint: 6,2,1,2
     label: 'Measured Frequency  '
     type: real
     value: 434e6
@@ -183,7 +185,7 @@ blocks:
     bus_structure: null
     coordinate: [176, 612.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: entry_var_sample_rate_osmosdr
   id: variable_qtgui_entry
   parameters:
@@ -198,12 +200,12 @@ blocks:
     bus_structure: null
     coordinate: [176, 708.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: sample_rate
   id: variable
   parameters:
     comment: sample_rate = sample_rate_osmosdr
-    value: entry_var_sample_rate_osmosdr
+    value: 1.152e6
   states:
     bus_sink: false
     bus_source: false
@@ -266,7 +268,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 244.0]
+    coordinate: [704, 60.0]
     rotation: 0
     state: true
 - name: var_record
@@ -407,13 +409,13 @@ blocks:
     source_code: "# this module will be imported in the into your flowgraph\nimport\
       \ socket\nfrom gnuradio import eng_notation\nfrom PyQt5 import Qt\n\ndef client(tt):\n\
       \    # Storage variables initial values\n    variables=[\"entry_var_frequency_\"\
-      ,\"var_waveform_\",\"entry_var_amplitude_\",\"entry_var_offset_\",\"entry_var_sample_rate_gr\"\
-      ,\"entry_var_sample_rate_osmosdr\",\"entry_var_carrying_frequency\",\"entry_var_measured_frequency\"\
-      ,\"entry_start_freq\",\"entry_span_freq\",\"entry_end_freq\"]\n    old_values=[]\n\
-      \    for variable in variables:\n        exec(\"old_values.append(tt.get_{}())\"\
-      .format(variable))\n        # Convert default values of entry controls to eng\
-      \ notation \n        if(\"entry\" in variable):\n            Qt.QMetaObject.invokeMethod(eval(\"\
-      tt._{}_line_edit\".format(variable)), \"setText\", Qt.Q_ARG(\"QString\", eng_notation.num_to_str(eval(\"\
+      ,\"var_waveform_\",\"entry_var_amplitude_\",\"entry_var_offset_\",\"entry_var_carrying_frequency\"\
+      ,\"entry_var_measured_frequency\",\"entry_start_freq\",\"entry_span_freq\",\"\
+      entry_end_freq\"]\n    old_values=[]\n    for variable in variables:\n     \
+      \   exec(\"old_values.append(tt.get_{}())\".format(variable))\n        # Convert\
+      \ default values of entry controls to eng notation \n        if(\"entry\" in\
+      \ variable):\n            Qt.QMetaObject.invokeMethod(eval(\"tt._{}_line_edit\"\
+      .format(variable)), \"setText\", Qt.Q_ARG(\"QString\", eng_notation.num_to_str(eval(\"\
       tt.{}\".format(variable)))))\n    while True:\n        # Try to connect\n  \
       \      host = '192.168.137.8'\n        port = 4242\n        client_socket =\
       \ socket.socket()\n        try:\n            client_socket.connect((host, port))\n\
@@ -467,55 +469,58 @@ blocks:
   parameters:
     alias: ''
     comment: ''
-    source_code: "# this module will be imported in the into your flowgraph\n\nimport\
-      \ numpy as np\nimport zmq\nimport array\nfrom PyQt5 import Qt\nimport time\n\
-      import scipy.interpolate as interp\nimport os\nimport datetime\nimport math\n\
-      # Function to divide the frequencies sub-lists\ndef list_split(listA, n):\n\
-      \    for x in range(0, len(listA), n):\n        every_chunk = listA[x: n+x]\n\
-      \        yield every_chunk\n#\n# Function to print the measurement status on\
-      \ the GUI\ndef update_status(frequency_list, current_frequency, start_time):\n\
-      \    total=len(frequency_list)\n    completed=frequency_list.index(current_frequency)+1\n\
+    source_code: "# this module will be imported in the into your flowgraph\nimport\
+      \ zmq\nimport numpy as np\nimport array\nimport scipy.interpolate as interp\n\
+      import math\nfrom PyQt5 import Qt\nimport time\nimport datetime\nimport os\n\
+      \n# Function to print the measurement status on the GUI\ndef update_status(frequency_list,\
+      \ current_frequency, start_time):\n    total=len(frequency_list)\n    completed=frequency_list.index(current_frequency)+1\n\
       \    percentage=(completed/total)*100\n    elapsed_time=datetime.datetime.now()-start_time\n\
       \    remaining_time=datetime.timedelta(seconds=elapsed_time.total_seconds()*((100-percentage)/percentage))\n\
       \    return  \"\\t({0}/{1})\\t\\t-\\t{2:1.2f}%\\t-\\tTime remaining: {3}\\t-\\\
       tElapsed time: {4}\".format(\n        completed,total,percentage,str(remaining_time).split('.',\
-      \ 2)[0],str(elapsed_time).split('.', 2)[0])\n#\n# Function to retreive the index\
-      \ of the closest value of an array\ndef closest(lst, K):\n     lst = np.asarray(lst)\n\
-      \     idx = (np.abs(lst - K)).argmin()\n     return idx\n#\ndef sweep(tt):\n\
-      \    context=zmq.Context()\n    vector_length=int(tt.get_vector_length())\n\
-      \    mean_amplitude=[]\n    mean_amplitude_array=[]\n    # real_values_array=np.array([0])\n\
-      \    real_values_array=np.full(vector_length,-1.0)\n    mean_amplitude_array=np.array([0])\n\
-      \    # Set the vector sink properties\n    tt.qtgui_vector_sink_f_0.set_line_marker(1,0)\n\
-      \    tt.qtgui_vector_sink_f_0.set_line_style(1,0)\n    while True:\n       \
-      \ while tt.get_sweeping()==\"True\":\n            # Reset real points plot\n\
-      \            tt.set_vector_data_2(real_values_array)\n            # Set delay\
-      \ variable\n            delay=0.75\n            start_time=datetime.datetime.now()\n\
+      \ 2)[0],str(elapsed_time).split('.', 2)[0])\n#\n# Function to divide the frequencies\
+      \ sub-lists\ndef list_split(listA, n):\n    for x in range(0, len(listA), n):\n\
+      \        every_chunk = listA[x: n+x]\n        yield every_chunk\n#\n# Function\
+      \ to retreive the index of the closest value of an array (not used)\ndef closest(lst,\
+      \ K):\n     lst = np.asarray(lst)\n     idx = (np.abs(lst - K)).argmin()\n \
+      \    return idx\n#\ndef sweep(tt):\n    context=zmq.Context()\n    vector_length=int(tt.get_vector_length())\n\
+      \    mean_amplitude=[]\n    mean_amplitude_array=[]\n    \n    real_values_array=np.full(vector_length,-1.0)\n\
+      \    mean_amplitude_array=np.array([0])\n    # Set the vector sink properties\n\
+      \    tt.qtgui_vector_sink_f_0.set_line_marker(1,0)\n    tt.qtgui_vector_sink_f_0.set_line_style(1,0)\n\
+      \    while True:\n        while tt.get_sweeping()==\"True\":\n            #\
+      \ Reset real points plot\n            tt.set_vector_data_2(real_values_array)\n\
+      \            # Set delay variable\n            delay=0.75\n            start_time=datetime.datetime.now()\n\
       \            # Clear the terminal\n            os.system('cls||clear')\n   \
       \         # Deactivate/Activate Hold maximum in frequency sink\n           \
       \ tt.qtgui_freq_sink_x_0.enable_max_hold(False)\n            tt.qtgui_freq_sink_x_0.enable_max_hold(True)\n\
       \            # Retrieve start, span and end frequency\n            start_freq=tt.get_entry_start_freq()/5\n\
       \            span_freq=tt.get_entry_span_freq()\n            end_freq=tt.get_entry_end_freq()/5\n\
       \            # Calculate the frequency range\n            frequencies=np.arange(start_freq,end_freq,span_freq).tolist()\n\
-      \            frequencies.append(end_freq)\n            n=int(len(frequencies)/((end_freq-start_freq)/100e3))\n\
-      \            frequency_chunks=list(list_split(frequencies, n))\n           \
-      \ # Set the vector sink properties\n            x_start=(frequencies[0]*5)/1e6\n\
-      \            x_step=((frequencies[len(frequencies)-1]-frequencies[0])/vector_length)/1e6\n\
-      \            tt.qtgui_vector_sink_f_0.set_x_axis(x_start, x_step)\n        \
-      \    # Main procees\n            for set in frequency_chunks:\n            \
-      \    if tt.get_var_method()==1:\n                    print(\"Changing carrier\
-      \ frequency: {}\".format(float(set[0])))\n                    tt.set_entry_var_carrying_frequency(float(set[0]))\n\
-      \                for f in set:\n                    if tt.get_var_method()==0:\n\
-      \                        print(\"Changing carrier frequency: {}\".format(float(f)))\n\
-      \                        tt.set_entry_var_carrying_frequency(float(f)) \n  \
-      \                  else:\n                        print(\"Changing generated\
-      \ frequency: {}\".format(float(f)))\n                        tt.set_entry_var_frequency_(float(f))\n\
-      \                    time.sleep(delay) # Sleep for 500 miliseconds\n       \
-      \             # Update status label\n                    try:\n            \
-      \            tt.set_var_status(update_status(frequencies, f, start_time))\n\
-      \                    except:\n                        pass\n               \
-      \     #\n                    if tt.get_sweeping()==\"False\":\n            \
-      \            break\n                    # Record stream of data\n          \
-      \          sock1=context.socket(zmq.SUB)\n                    sock1.connect(\"\
+      \            frequencies.append(end_freq)\n            carrier_step=5e3\n  \
+      \          n=int(len(frequencies)/((end_freq-start_freq)/carrier_step))\n  \
+      \          frequency_chunks=list(list_split(frequencies, n))\n            #\
+      \ Set the vector sink properties\n            x_start=(start_freq*5)/1e6\n \
+      \           x_step=(5*(end_freq-start_freq)/1e6)/vector_length\n           \
+      \ tt.qtgui_vector_sink_f_0.set_x_axis(x_start, x_step)\n            # Main procees\n\
+      \            for set in frequency_chunks:\n                if tt.get_var_method()==1:\
+      \ #Sweep generated frequency\n                    print(\"Changing carrier frequency:\
+      \ {}\".format(float(set[0])))\n                    tt.set_entry_var_carrying_frequency(float(set[0]))\n\
+      \                    #Change measuring frequency\n                    tt.set_entry_var_measured_frequency(float(set[0])*5)\n\
+      \                    time.sleep(delay) # Sleep for 750 miliseconds\n       \
+      \         else:\n                    tt.set_entry_var_measured_frequency(float(start_freq+(end_freq-start_freq)/2)*5)\n\
+      \                for f in set:\n                    if tt.get_var_method()==0:\
+      \ #Sweep carrier frequency only\n                        print(\"Changing carrier\
+      \ frequency: {}\".format(float(f)))\n                        tt.set_entry_var_carrying_frequency(float(f))\
+      \ \n                    else: #Sweep generated frequency\n                 \
+      \       print(\"Changing generated frequency: {}\".format(float(f)))\n     \
+      \                   tt.set_entry_var_frequency_(float(f)-float(set[0]))\n  \
+      \                  time.sleep(delay) # Sleep for 750 miliseconds\n         \
+      \           # Update status label\n                    try:\n              \
+      \          tt.set_var_status(update_status(frequencies, f, start_time))\n  \
+      \                  except:\n                        pass\n                 \
+      \   #\n                    if tt.get_sweeping()==\"False\":\n              \
+      \          break\n                    # Record stream of data\n            \
+      \        sock1=context.socket(zmq.SUB)\n                    sock1.connect(\"\
       tcp://192.168.137.8:5555\")\n                    sock1.setsockopt(zmq.SUBSCRIBE,b\"\
       \")\n                    raw_recv=sock1.recv()\n                    sock1.close()\n\
       \                    recv=array.array('f',raw_recv) #float\n               \
@@ -535,12 +540,12 @@ blocks:
       \                    if math.isclose(value, mean_amplitude_array[idx],abs_tol\
       \ = tolerance):\n                        real_values_array[i]=value\n      \
       \                  idx=idx+1\n            except:\n                pass\n  \
-      \          tt.set_vector_data_2(real_values_array)\n            # time.sleep(5)\n\
-      \            #\n            # All frequencies tested, set button back to \"\
-      Start\"\n            btn_index=6\n            tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().setText(\"\
-      Start\")\n            tt.set_sweeping(\"False\")\n            # Reset arrays\n\
-      \            mean_amplitude=[]\n            mean_amplitude_array=[]\n      \
-      \      real_values_array=np.full(vector_length,-1.0)\n"
+      \          tt.set_vector_data_2(real_values_array)\n            # All frequencies\
+      \ tested, set button back to \"Start\"\n            btn_index=6\n          \
+      \  tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().setText(\"Start\"\
+      )\n            tt.set_sweeping(\"False\")\n            # Reset arrays\n    \
+      \        mean_amplitude=[]\n            mean_amplitude_array=[]\n          \
+      \  real_values_array=np.full(vector_length,-1.0)"
   states:
     bus_sink: false
     bus_source: false
@@ -784,8 +789,8 @@ blocks:
     width8: '1'
     width9: '1'
     x_axis_label: '"Frequency (MHz)"'
-    x_start: '86'
-    x_step: '1'
+    x_start: '433.42'
+    x_step: '0.0002265625'
     x_units: '"MHz"'
     y_axis_label: '"Relative Mean voltage"'
     y_units: '""'

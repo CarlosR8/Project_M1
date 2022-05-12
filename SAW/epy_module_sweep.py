@@ -1,20 +1,14 @@
 # this module will be imported in the into your flowgraph
-
-import numpy as np
 import zmq
+import numpy as np
 import array
+import scipy.interpolate as interp
+import math
 from PyQt5 import Qt
 import time
-import scipy.interpolate as interp
-import os
 import datetime
-import math
-# Function to divide the frequencies sub-lists
-def list_split(listA, n):
-    for x in range(0, len(listA), n):
-        every_chunk = listA[x: n+x]
-        yield every_chunk
-#
+import os
+
 # Function to print the measurement status on the GUI
 def update_status(frequency_list, current_frequency, start_time):
     total=len(frequency_list)
@@ -25,7 +19,13 @@ def update_status(frequency_list, current_frequency, start_time):
     return  "\t({0}/{1})\t\t-\t{2:1.2f}%\t-\tTime remaining: {3}\t-\tElapsed time: {4}".format(
         completed,total,percentage,str(remaining_time).split('.', 2)[0],str(elapsed_time).split('.', 2)[0])
 #
-# Function to retreive the index of the closest value of an array
+# Function to divide the frequencies sub-lists
+def list_split(listA, n):
+    for x in range(0, len(listA), n):
+        every_chunk = listA[x: n+x]
+        yield every_chunk
+#
+# Function to retreive the index of the closest value of an array (not used)
 def closest(lst, K):
      lst = np.asarray(lst)
      idx = (np.abs(lst - K)).argmin()
@@ -36,7 +36,7 @@ def sweep(tt):
     vector_length=int(tt.get_vector_length())
     mean_amplitude=[]
     mean_amplitude_array=[]
-    # real_values_array=np.array([0])
+    
     real_values_array=np.full(vector_length,-1.0)
     mean_amplitude_array=np.array([0])
     # Set the vector sink properties
@@ -61,25 +61,31 @@ def sweep(tt):
             # Calculate the frequency range
             frequencies=np.arange(start_freq,end_freq,span_freq).tolist()
             frequencies.append(end_freq)
-            n=int(len(frequencies)/((end_freq-start_freq)/100e3))
+            carrier_step=5e3
+            n=int(len(frequencies)/((end_freq-start_freq)/carrier_step))
             frequency_chunks=list(list_split(frequencies, n))
             # Set the vector sink properties
-            x_start=(frequencies[0]*5)/1e6
-            x_step=((frequencies[len(frequencies)-1]-frequencies[0])/vector_length)/1e6
+            x_start=(start_freq*5)/1e6
+            x_step=(5*(end_freq-start_freq)/1e6)/vector_length
             tt.qtgui_vector_sink_f_0.set_x_axis(x_start, x_step)
             # Main procees
             for set in frequency_chunks:
-                if tt.get_var_method()==1:
+                if tt.get_var_method()==1: #Sweep generated frequency
                     print("Changing carrier frequency: {}".format(float(set[0])))
                     tt.set_entry_var_carrying_frequency(float(set[0]))
+                    #Change measuring frequency
+                    tt.set_entry_var_measured_frequency(float(set[0])*5)
+                    time.sleep(delay) # Sleep for 750 miliseconds
+                else:
+                    tt.set_entry_var_measured_frequency(float(start_freq+(end_freq-start_freq)/2)*5)
                 for f in set:
-                    if tt.get_var_method()==0:
+                    if tt.get_var_method()==0: #Sweep carrier frequency only
                         print("Changing carrier frequency: {}".format(float(f)))
                         tt.set_entry_var_carrying_frequency(float(f)) 
-                    else:
+                    else: #Sweep generated frequency
                         print("Changing generated frequency: {}".format(float(f)))
-                        tt.set_entry_var_frequency_(float(f))
-                    time.sleep(delay) # Sleep for 500 miliseconds
+                        tt.set_entry_var_frequency_(float(f)-float(set[0]))
+                    time.sleep(delay) # Sleep for 750 miliseconds
                     # Update status label
                     try:
                         tt.set_var_status(update_status(frequencies, f, start_time))
@@ -119,8 +125,6 @@ def sweep(tt):
             except:
                 pass
             tt.set_vector_data_2(real_values_array)
-            # time.sleep(5)
-            #
             # All frequencies tested, set button back to "Start"
             btn_index=6
             tt.tab_widget_0_grid_layout_1.itemAt(btn_index).widget().setText("Start")

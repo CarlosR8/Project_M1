@@ -68,26 +68,25 @@ blocks:
       \ # List of variable values\n\tshared_variables = [] # List of variables set\
       \ on init\n\tdef __init__(self,shared_variables_):\n\t\tself.shared_variables\
       \ = shared_variables_\n\t\tpass\n\tdef clear(self):\n\t\tself.names = []\n\t\
-      \tself.values = []\n\tdef save_variables(self, tt):\n\t\t# try:\n\t\t\tself.clear()\n\
-      \t\t\tfor variable in self.shared_variables:\n\t\t\t\tself.names.append(variable)\n\
+      \tself.values = []\n\tdef save_variables(self, tt):\n\t\t\tself.clear()\n\t\t\
+      \tfor variable in self.shared_variables:\n\t\t\t\tself.names.append(variable)\n\
       \t\t\t\tself.values.append(eval(\"tt.get_{}()\".format(variable)))\n\t\t\t#\
       \ Saving in json file\n\t\t\tf = open(\"shared_variables.json\", \"w\")\n\t\t\
-      \tf.write(json.dumps(self.__dict__))\n\t\t\tf.close()\n\t\t# except:\n\t\t#\
-      \ \tpass\n\tdef retrieve_variables(self, tt):\n\t\t# Check if file exist\n\t\
-      \tif(path.exists(\"shared_variables.json\")):\n\t\t\tself.clear()\n\t\t\twith\
-      \ open(\"shared_variables.json\") as f:\n\t\t\t\tcontent = f.readline()\n\t\t\
-      \t\tself.__dict__ = json.loads(content)\n\t\t\t# Check if shared variables content\
-      \ is diff from local\n\t\t\tfor i,variable in enumerate(self.names):\n\t\t\t\
-      \tvar_name = variable\n\t\t\t\tvar_value = self.values[i]\n\t\t\t\tif(eval(\"\
-      tt.get_{}()\".format(var_name))!=self.values[i]):\n\t\t\t\t\t# value is different,\
-      \ setting variable\n\t\t\t\t\tcommand = \"tt.set_{}(float({}))\".format(var_name,\
-      \ var_value)\n\t\t\t\t\texec(command) \n\t\t\t\t\tprint(\"The new value of the\
-      \ shared variable {} is: {}\".format(var_name, var_value))\n\t\t\t# Once read,\
-      \ remove it\t\n\t\t\tos.remove(\"shared_variables.json\")\t\n\t\t\n# \n\ndef\
-      \ main(tt):\n\t# Create list of shared variables\n\tshared_variables = [\"entry_var_sample_rate_osmosdr\"\
-      ,\"entry_var_measured_frequency\"]\n\tsFile = Shared_Variable(shared_variables)\n\
-      \twhile True:\n\t\ttry:\n\t\t\tsFile.retrieve_variables(tt)\n\t\texcept:\n\t\
-      \t\tpass"
+      \tf.write(json.dumps(self.__dict__))\n\t\t\tf.close()\n\tdef retrieve_variables(self,\
+      \ tt):\n\t\t# Check if file exist\n\t\tif(path.exists(\"shared_variables.json\"\
+      )):\n\t\t\tself.clear()\n\t\t\twith open(\"shared_variables.json\") as f:\n\t\
+      \t\t\tcontent = f.readline()\n\t\t\t\tself.__dict__ = json.loads(content)\n\t\
+      \t\t# Check if shared variables content is diff from local\n\t\t\tfor i,variable\
+      \ in enumerate(self.names):\n\t\t\t\tvar_name = variable\n\t\t\t\tvar_value\
+      \ = self.values[i]\n\t\t\t\tif(eval(\"tt.get_{}()\".format(var_name))!=self.values[i]):\n\
+      \t\t\t\t\t# value is different, setting variable\n\t\t\t\t\tcommand = \"tt.set_{}(float({}))\"\
+      .format(var_name, var_value)\n\t\t\t\t\texec(command) \n\t\t\t\t\tprint(\"The\
+      \ new value of the shared variable {} is: {}\".format(var_name, var_value))\n\
+      \t\t\t# Once read, remove it\t\n\t\t\tos.remove(\"shared_variables.json\")\t\
+      \n\t\t\n# \n\ndef main(tt):\n\t# Create list of shared variables\n\tshared_variables\
+      \ = [\"entry_var_sample_rate_osmosdr\",\"entry_var_measured_frequency\"]\n\t\
+      sFile = Shared_Variable(shared_variables)\n\twhile True:\n\t\ttry:\n\t\t\tsFile.retrieve_variables(tt)\n\
+      \t\texcept:\n\t\t\tpass"
   states:
     bus_sink: false
     bus_source: false

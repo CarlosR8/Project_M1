@@ -15,7 +15,6 @@ class Shared_Variable:
 		self.names = []
 		self.values = []
 	def save_variables(self, tt):
-		# try:
 			self.clear()
 			for variable in self.shared_variables:
 				self.names.append(variable)
@@ -24,8 +23,6 @@ class Shared_Variable:
 			f = open("shared_variables.json", "w")
 			f.write(json.dumps(self.__dict__))
 			f.close()
-		# except:
-		# 	pass
 	def retrieve_variables(self, tt):
 		# Check if file exist
 		if(path.exists("shared_variables.json")):

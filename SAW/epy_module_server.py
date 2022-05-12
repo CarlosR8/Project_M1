@@ -1,6 +1,5 @@
 # this module will be imported in the into your flowgraph
 import socket
-# import string
 import json  # To save variables as json
 import ntpath  # To retrieve file name out of address
 import os.path
@@ -13,12 +12,10 @@ class Shared_Variable:
 	shared_variables = [] # List of variables set on init
 	def __init__(self,shared_variables_):
 		self.shared_variables = shared_variables_
-		pass
 	def clear(self):
 		self.names = []
 		self.values = []
 	def save_variables(self, tt):
-		# try:
 			self.clear()
 			for variable in self.shared_variables:
 				self.names.append(variable)
@@ -27,8 +24,6 @@ class Shared_Variable:
 			f = open("shared_variables.json", "w")
 			f.write(json.dumps(self.__dict__))
 			f.close()
-		# except:
-		# 	pass
 	def retrieve_variables(self, tt):
 		# Check if file exist
 		if(path.exists("shared_variables.json")):
@@ -66,8 +61,7 @@ def server(tt):
 				if data:
 					data=data.decode()
 					message = message+data
-					# print(message)
-					if '>' in message: # Delimeter to indicate end of message
+					if '>' in message: # Delimiter to indicate end of message
 						try:
 							# Changing local variables
 							message = message.replace('>','').strip()
@@ -85,9 +79,8 @@ def server(tt):
 							message = "" # Reset message variable
 							print("Error: variable not set")						
 					# Quit
-					if 'quit' in data:
+					if 'quit' in message:
 						print("Closing connection...")
 						sock.shutdown(socket.SHUT_RDWR)
 						sock.close()
 						break # Back to listen loop
-			# C

@@ -5,7 +5,7 @@ from PyQt5 import Qt
 
 def client(tt):
     # Storage variables initial values
-    variables=["entry_var_frequency_","var_waveform_","entry_var_amplitude_","entry_var_offset_","entry_var_sample_rate_gr","entry_var_sample_rate_osmosdr","entry_var_carrying_frequency","entry_var_measured_frequency","entry_start_freq","entry_span_freq","entry_end_freq"]
+    variables=["entry_var_frequency_","var_waveform_","entry_var_amplitude_","entry_var_offset_","entry_var_carrying_frequency","entry_var_measured_frequency","entry_start_freq","entry_span_freq","entry_end_freq"]
     old_values=[]
     for variable in variables:
         exec("old_values.append(tt.get_{}())".format(variable))

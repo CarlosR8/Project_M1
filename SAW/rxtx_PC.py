@@ -77,7 +77,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         ##################################################
         self.vector_length = vector_length = 1024
         self.var_status = var_status = "(0/0) - 0%"
-        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr = 1.152e6
         self.vector_data_2 = vector_data_2 = range(vector_length)
         self.vector_data = vector_data = range(vector_length)
         self.var_waveform_ = var_waveform_ = 2
@@ -85,8 +84,7 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.var_method = var_method = 0
         self.sweeping = sweeping = "False"
         self.status = status = var_status
-        self.sample_rate = sample_rate = entry_var_sample_rate_osmosdr
-        self.entry_var_sample_rate_gr = entry_var_sample_rate_gr = 200e3
+        self.sample_rate = sample_rate = 1.152e6
         self.entry_var_offset_ = entry_var_offset_ = 0.5
         self.entry_var_measured_frequency = entry_var_measured_frequency = 434e6
         self.entry_var_frequency_ = entry_var_frequency_ = 10e3
@@ -122,10 +120,10 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self._entry_var_measured_frequency_tool_bar.addWidget(self._entry_var_measured_frequency_line_edit)
         self._entry_var_measured_frequency_line_edit.returnPressed.connect(
             lambda: self.set_entry_var_measured_frequency(eng_notation.str_to_num(str(self._entry_var_measured_frequency_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._entry_var_measured_frequency_tool_bar, 7, 0, 1, 2)
-        for r in range(7, 8):
+        self.top_grid_layout.addWidget(self._entry_var_measured_frequency_tool_bar, 6, 2, 1, 2)
+        for r in range(6, 7):
             self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(0, 2):
+        for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://192.168.137.8:5555', 100, False, -1)
         # Create the options list
@@ -194,8 +192,8 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.tab_widget_0_grid_layout_1.setColumnStretch(c, 1)
         self.qtgui_vector_sink_f_0 = qtgui.vector_sink_f(
             vector_length,
-            86,
-            1,
+            433.42,
+            0.0002265625,
             "Frequency (MHz)",
             "Relative Mean voltage",
             "",
@@ -331,28 +329,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
             self.tab_widget_0_grid_layout_0.setRowStretch(r, 1)
         for c in range(0, 4):
             self.tab_widget_0_grid_layout_0.setColumnStretch(c, 1)
-        self._entry_var_sample_rate_osmosdr_tool_bar = Qt.QToolBar(self)
-        self._entry_var_sample_rate_osmosdr_tool_bar.addWidget(Qt.QLabel('Sample rate Osmosdr' + ": "))
-        self._entry_var_sample_rate_osmosdr_line_edit = Qt.QLineEdit(str(self.entry_var_sample_rate_osmosdr))
-        self._entry_var_sample_rate_osmosdr_tool_bar.addWidget(self._entry_var_sample_rate_osmosdr_line_edit)
-        self._entry_var_sample_rate_osmosdr_line_edit.returnPressed.connect(
-            lambda: self.set_entry_var_sample_rate_osmosdr(eng_notation.str_to_num(str(self._entry_var_sample_rate_osmosdr_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._entry_var_sample_rate_osmosdr_tool_bar, 7, 2, 1, 2)
-        for r in range(7, 8):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(2, 4):
-            self.top_grid_layout.setColumnStretch(c, 1)
-        self._entry_var_sample_rate_gr_tool_bar = Qt.QToolBar(self)
-        self._entry_var_sample_rate_gr_tool_bar.addWidget(Qt.QLabel('Sample rate gr-rpitx  ' + ": "))
-        self._entry_var_sample_rate_gr_line_edit = Qt.QLineEdit(str(self.entry_var_sample_rate_gr))
-        self._entry_var_sample_rate_gr_tool_bar.addWidget(self._entry_var_sample_rate_gr_line_edit)
-        self._entry_var_sample_rate_gr_line_edit.returnPressed.connect(
-            lambda: self.set_entry_var_sample_rate_gr(eng_notation.str_to_num(str(self._entry_var_sample_rate_gr_line_edit.text()))))
-        self.top_grid_layout.addWidget(self._entry_var_sample_rate_gr_tool_bar, 6, 2, 1, 2)
-        for r in range(6, 7):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(2, 4):
-            self.top_grid_layout.setColumnStretch(c, 1)
         self._entry_var_offset__tool_bar = Qt.QToolBar(self)
         self._entry_var_offset__tool_bar.addWidget(Qt.QLabel('Offset                        ' + ": "))
         self._entry_var_offset__line_edit = Qt.QLineEdit(str(self.entry_var_offset_))
@@ -473,14 +449,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.var_status = var_status
         self.set_status(self._status_formatter(self.var_status))
 
-    def get_entry_var_sample_rate_osmosdr(self):
-        return self.entry_var_sample_rate_osmosdr
-
-    def set_entry_var_sample_rate_osmosdr(self, entry_var_sample_rate_osmosdr):
-        self.entry_var_sample_rate_osmosdr = entry_var_sample_rate_osmosdr
-        Qt.QMetaObject.invokeMethod(self._entry_var_sample_rate_osmosdr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_sample_rate_osmosdr)))
-        self.set_sample_rate(self.entry_var_sample_rate_osmosdr)
-
     def get_vector_data_2(self):
         return self.vector_data_2
 
@@ -535,13 +503,6 @@ class rxtx_PC(gr.top_block, Qt.QWidget):
         self.sample_rate = sample_rate
         self.qtgui_freq_sink_x_0.set_frequency_range(self.entry_var_measured_frequency, self.sample_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.sample_rate)
-
-    def get_entry_var_sample_rate_gr(self):
-        return self.entry_var_sample_rate_gr
-
-    def set_entry_var_sample_rate_gr(self, entry_var_sample_rate_gr):
-        self.entry_var_sample_rate_gr = entry_var_sample_rate_gr
-        Qt.QMetaObject.invokeMethod(self._entry_var_sample_rate_gr_line_edit, "setText", Qt.Q_ARG("QString", eng_notation.num_to_str(self.entry_var_sample_rate_gr)))
 
     def get_entry_var_offset_(self):
         return self.entry_var_offset_
